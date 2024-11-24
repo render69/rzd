@@ -1,15 +1,16 @@
 "use client";
 
 import styles from "./style/Home.module.css";
-import rzdlipmain from "./rzdlip.jpg";
+import rzdlipmain from "./lk.jpg";
 import Image from 'next/image'
 
 
 export default function Home() {
   return (
-    <div className={styles.container}>
+  <div className={styles.container}>
+    <div className={styles.imagefilter}></div>
     <div className={styles.imageSection}>
-      <Image src={rzdlipmain} alt="Логотип РЖД" />
+      <Image src={rzdlipmain} className={styles.imagess} alt="Логотип РЖД" />
     </div>
     <div className={styles.formSection}>
       <h1>Вход в личный кабинет РЖД</h1>

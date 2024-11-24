@@ -1,5 +1,7 @@
 // import type { Metadata } from "next";
 import localFont from "next/font/local";
+import styles from "./style/Home.module.css";
+
 import "./globals.css";
 
 export const metadata = {
@@ -14,11 +16,13 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="ru">
       <body>
-        {/* <LanguageProvider> */}
+        <div className={styles.container123}>
+    {/* <LanguageProvider> */}
           {/* <Header /> */}
           {children}
           {/* <Footer /> */}
         {/* </LanguageProvider> */}
+        </div>
       </body>
     </html>
   );
