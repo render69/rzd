@@ -1,34 +1,37 @@
-"use client";
+'use client'; 
 
 import styles from "./style/Home.module.css";
 import rzdlipmain from "./lk.jpg";
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from 'react';
-import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation'; // Убедись, что используешь из next/navigation
 
-export default function Home() {
-  const [email, setEmail] = useState('');
+const Page = () => {
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    const result = await signIn('credentials', {
-      redirect: false,
-      email,
-      password,
+    
+    const res = await fetch('/api/auth', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
     });
-
-    if (result?.error) {
-      setError('Invalid credentials');
-    } else if (result?.ok) {
-      router.push('/lk'); // Переадресация в личный кабинет
+  
+    if (res.ok) {
+      // Если вход успешен, перенаправляем на другую страницу
+      console.log('Успешный вход');
+      window.location.href = '/dashboard'; // Редирект на страницу панели управления
+    } else {
+      const data = await res.json();
+      console.error('Ошибка: ', data.message);  // Вывод ошибки с сервера
+      alert('Ошибка авторизации: ' + data.message); // Покажите пользователю сообщение об ошибке
     }
   };
+  
 
   return (
     <div className={styles.container}>
@@ -40,11 +43,21 @@ export default function Home() {
         <form onSubmit={handleSubmit}>
           <div className={styles.inputGroup}>
             <label htmlFor="username">Логин</label>
-            <input type="email" id="username" name="username" required />
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
           </div>
           <div className={styles.inputGroup}>
             <label htmlFor="password">Пароль</label>
-            <input type="password" id="password" name="password" required />
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
           <button type="submit">Войти</button>
           <a href="/forgot-password" className={styles.forgotLink}>
@@ -55,3 +68,5 @@ export default function Home() {
     </div>
   );
 };
+
+export default Page;  // Экспортируем LoginPage, а не Page
