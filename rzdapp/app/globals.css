@@ -1,3 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+  /* Цвета */
+  /* Primary Colors */
+  --color-primary-lightest: #E3F2FD;
+  --color-primary-lighter: #BBDEFB;
+  --color-primary-light: #90CAF9;
+  --color-primary: #2196F3;
+  --color-primary-dark: #1976D2;
+  --color-primary-darker: #1565C0;
+  --color-primary-darkest: #0D47A1;
+
+  /* Secondary Colors */
+  --color-secondary-lightest: #FCE4EC;
+  --color-secondary-lighter: #F8BBD0;
+  --color-secondary-light: #F48FB1;
+  --color-secondary: #E91E63;
+  --color-secondary-dark: #C2185B;
+  --color-secondary-darker: #AD1457;
+  --color-secondary-darkest: #880E4F;
+
+  /* Success Colors */
+  --color-success-lightest: #E8F5E9;
+  --color-success-lighter: #C8E6C9;
+  --color-success-light: #A5D6A7;
+  --color-success: #4CAF50;
+  --color-success-dark: #388E3C;
+  --color-success-darker: #2E7D32;
+  --color-success-darkest: #1B5E20;
+
+  /* Warning Colors */
+  --color-warning-lightest: #FFF8E1;
+  --color-warning-lighter: #FFECB3;
+  --color-warning-light: #FFE082;
+  --color-warning: #FFC107;
+  --color-warning-dark: #FFA000;
+  --color-warning-darker: #FF8F00;
+  --color-warning-darkest: #FF6F00;
+
+  /* Error Colors */
+  --color-error-lightest: #FFEBEE;
+  --color-error-lighter: #FFCDD2;
+  --color-error-light: #EF9A9A;
+  --color-error: #F44336;
+  --color-error-dark: #D32F2F;
+  --color-error-darker: #C62828;
+  --color-error-darkest: #B71C1C;
+
+  /* Info Colors */
+  --color-info-lightest: #E1F5FE;
+  --color-info-lighter: #B3E5FC;
+  --color-info-light: #81D4FA;
+  --color-info: #03A9F4;
+  --color-info-dark: #0288D1;
+  --color-info-darker: #0277BD;
+  --color-info-darkest: #01579B;
+
+  /* Neutral Colors */
+  --color-neutral-lightest: #FAFAFA;
+  --color-neutral-lighter: #F5F5F5;
+  --color-neutral-light: #EEEEEE;
+  --color-neutral: #9E9E9E;
+  --color-neutral-dark: #616161;
+  --color-neutral-darker: #424242;
+  --color-neutral-darkest: #212121;
+
+  /* Additional Accent Colors */
+  --color-accent-purple: #9C27B0;
+  --color-accent-deep-purple: #673AB7;
+  --color-accent-indigo: #3F51B5;
+  --color-accent-blue: #2196F3;
+  --color-accent-cyan: #00BCD4;
+  --color-accent-teal: #009688;
+  --color-accent-green: #4CAF50;
+  --color-accent-lime: #CDDC39;
+  --color-accent-yellow: #FFEB3B;
+  --color-accent-amber: #FFC107;
+  --color-accent-orange: #FF9800;
+  --color-accent-deep-orange: #FF5722;
+  
+
+  /* Темы */
+  --theme-light: #fff;
+  --theme-dark: #000;
+
+  /* Отступы */
+  --spacing-small: 8px;
+  --spacing-medium: 16px;
+  --spacing-large: 24px;
+
+  /* Шрифты */
+  --font-family: 'Arial', sans-serif;
+  --font-size-base: 16px;
+
+  --primary-color: #333;
+  --secondary-color: #ff6600;
+  --overlay-color: rgba(0, 0, 0, 0.8);
+  --best-color: #69009a;
+  --best-color-2: #b819d4;
+  --worst-color: #F44336;
+  --text-color: #fff;
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -6,17 +113,13 @@
 
 body {
   margin: 0;
+  height: 100%;
   font-family: Arial, sans-serif;
   background-image: url("./rzd.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  /* opacity: 0.6; */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
 }
 button {
   width: 100%;

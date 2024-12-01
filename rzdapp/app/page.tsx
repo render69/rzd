@@ -24,7 +24,7 @@ const Page = () => {
     if (res.ok) {
       // Если вход успешен, перенаправляем на другую страницу
       console.log('Успешный вход');
-      window.location.href = '/dashboard'; // Редирект на страницу панели управления
+      window.location.href = '/lk'; // Редирект на страницу панели управления
     } else {
       const data = await res.json();
       console.error('Ошибка: ', data.message);  // Вывод ошибки с сервера
@@ -34,7 +34,8 @@ const Page = () => {
   
 
   return (
-    <div className={styles.container}>
+    <div className={styles.bodydiv}>
+<div className={styles.container}>
       <div className={styles.imageSection}>
         <Image src={rzdlipmain} className={styles.imagess} alt="Логотип РЖД" />
       </div>
@@ -65,6 +66,7 @@ const Page = () => {
           </a>
         </form>
       </div>
+    </div>
     </div>
   );
 };
