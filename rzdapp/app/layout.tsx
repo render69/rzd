@@ -25,10 +25,9 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     { id: 2, name: "Расписание", className: styles1.mainGl, link: '/lk/schedule', dataHover: "Расписание" },
     { id: 3, name: "Задачи", className: styles1.mainGl, link: '/lk/tasks', dataHover: "Задачи" },
     { id: 4, name: "Отчеты", className: styles1.mainGl, link: '/lk/reports', dataHover: "Отчеты" },
-    { id: 5, name: "Профиль", className: styles1.mainGl, link: '/lk/profile', dataHover: "Профиль" },
-    { id: 6, name: "Моя команда", className: styles1.mainGl, link: '/lk/team', dataHover: "Моя команда" },
-    { id: 7, name: "Поддержка", className: styles1.mainGl, link: '/lk/support', dataHover: "Поддержка" },
-    { id: 8, name: "Новости", className: styles1.mainGl, link: '/lk/news', dataHover: "Новости" },
+    { id: 5, name: "Моя команда", className: styles1.mainGl, link: '/lk/team', dataHover: "Моя команда" },
+    { id: 6, name: "Поддержка", className: styles1.mainGl, link: '/lk/support', dataHover: "Поддержка" },
+    { id: 7, name: "Новости", className: styles1.mainGl, link: '/lk/news', dataHover: "Новости" },
   ];
 
   return (
@@ -53,10 +52,16 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                   ))}
                 </ul>
               </nav>
-
-              <div className={styles1.leftPatel}>
-                <Image src={img1} alt="avatar" className={styles1.userImg} priority/>
-              </div>
+                <div className={styles1.leftPatel}>
+                    <Link href="/lk/profile">
+                        <Image 
+                        src={img1} 
+                        alt="avatar" 
+                        className={styles1.userImg} 
+                        priority 
+                        />
+                    </Link>
+                </div>
             </header>
           }
           <div className={styles1.mainchildren}>

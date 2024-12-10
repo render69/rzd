@@ -34,7 +34,7 @@ const Page = () => {
   
 
   return (
-    <div className={styles.bodydiv}>
+    <div className={`${styles.bodydiv} bg-white bg-opacity-30 backdrop-blur rounded-lg shadow-lg`}>
 <div className={styles.container}>
       <div className={styles.imageSection}>
         <Image src={rzdlipmain} className={styles.imagess} alt="Логотип РЖД" />
