@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './lk.module.css'; 
+import Link from 'next/link';
 
 interface User {
   id: number;
@@ -69,9 +70,11 @@ const Lk = () => {
           <div className="bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-6 border border-red-500">
             <h2 className="text-xl font-semibold text-red-600">Ваши задачи</h2>
             <p className="text-gray-700">3 активные задачи</p>
-            <button className="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
-              Открыть задачи
-            </button>
+            <Link href="/lk/tasks">
+                <button className="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                Открыть задачи
+                </button>
+            </Link>
           </div>
 
           <div className="bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-6 border border-red-500">

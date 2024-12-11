@@ -16,8 +16,10 @@ const SupportPage: React.FC = () => {
             <div className="p-1 bg-white bg-opacity-90 rounded-lg mb-1 text-center border border-red-500">
                 <h2 className="text-2xl font-semibold text-red-500">Выберите что вам необходимо</h2>
             </div>
-            <button></button>
-            <button></button>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 mt-4 pb-4'>
+                <button className='mb-10 p-10 bg-red-500 text-white text-3xl'>Чат с поддержкой</button>
+                <button className='mb-10 p-10 bg-red-500 text-white text-3xl'>FAQ</button>
+            </div>
         </div>
     </section>
   );
