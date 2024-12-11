@@ -51,6 +51,14 @@
     margin: 0;
     text-decoration: none;
 }
+@media (max-width: 1100px) {
+    .ulhead {
+        gap: 1px;
+    }
+    .ulhead a {
+        font-size: 13px;
+    }
+}
 .ulhead a:before,
 .ulhead a:after {
     position: absolute;
