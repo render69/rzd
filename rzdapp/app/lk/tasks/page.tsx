@@ -24,11 +24,11 @@ const TasksPage = () => {
   const getStatusClass = (status: Task['status']) => {
     switch (status) {
       case 'В процессе':
-        return 'bg-green-100';
-      case 'Ожидает':
         return 'bg-yellow-100';
-      case 'Завершено':
+      case 'Ожидает':
         return 'bg-red-100';
+      case 'Завершено':
+        return 'bg-green-100';
       default:
         return 'bg-gray-100';
     }
