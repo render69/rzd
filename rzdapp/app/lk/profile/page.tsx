@@ -1,21 +1,38 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
+import styles1 from './style/header.module.css';
+
+
+interface User {
+  avatar: string;
+  name: string;
+  position: string;
+  experience: string;
+  email: string;
+  phone: string;
+  address: string;
+}
 
 const Profile = () => {
-  const [isEditing, setIsEditing] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
-  // Тестовые данные пользователя
-  const user = {
-    avatar: '/user-avatar.png',
-    name: 'Иван Иванов',
-    position: 'Машинист',
-    experience: '5 лет',
-    email: 'ivanov@example.com',
-    phone: '+7 (999) 123-45-67',
-    address: 'Москва, ул. Примерная, д. 1',
-  };
+  useEffect(() => {
+    const fetchUser = async () => {
+      const res = await fetch('/api/user');
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  if (!user) {
+    return <div className="p-8">Загрузка профиля...</div>;
+  }
 
   return (
     <div className="mt-8 p-8 max-w-4xl mx-auto bg-white bg-opacity-30 backdrop-blur rounded-lg shadow-lg">
@@ -25,7 +42,7 @@ const Profile = () => {
           alt="Аватар пользователя"
           width={120}
           height={120}
-          className="rounded-full shadow-md"
+          className="w-32 h-32 rounded-full object-cover shadow-md"
         />
         <div>
           <h1 className="text-2xl font-bold">{user.name}</h1>
@@ -46,12 +63,12 @@ const Profile = () => {
         </p>
       </div>
 
-      <button
+      {/* <button
         onClick={() => setIsEditing(!isEditing)}
         className="mt-6 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
       >
         {isEditing ? 'Сохранить изменения' : 'Редактировать'}
-      </button>
+      </button> */}
     </div>
   );
 };

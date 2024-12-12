@@ -9,9 +9,15 @@ import Link from 'next/link';
 interface User {
   id: number;
   username: string;
+  position: string;
+  avatar: string;
+  name: string;
+  experience: string;
   email: string;
-  role: string;
+  phone: string;
+  address: string;
 }
+
 
 const Lk = () => {
   const [user, setUser] = useState<User | null>(null); // Типизируем состояние
@@ -43,17 +49,16 @@ const Lk = () => {
       {/* Информация о пользователе */}
         <div className="flex items-center mb-6 border border-red-500 bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-6">
           <div className="w-16 h-16 bg-gray-300 rounded-full flex-shrink-0">
-            {/* Место для аватара
-            {user.avatarUrl ? (
-              <img src={user.avatarUrl} alt="avatar" className="w-full h-full rounded-full object-cover" />
+            {user.avatar ? (
+              <img src={user.avatar} alt="avatar" className="w-full h-full rounded-full object-cover" />
             ) : (
               <div className="w-full h-full bg-gray-500 rounded-full" />
-            )} */}
+            )}
           </div>
           <div className="ml-5">
-            <h2 className="text-2xl font-bold">{user.username}</h2>
+            <h2 className="text-2xl font-bold">{user.name}</h2>
             <p className="text-sm text-gray-600">{user.email}</p>
-            <p className="text-sm text-gray-600">Роль: {user.role}</p>
+            <p className="text-sm text-gray-600">Роль: {user.position}</p>
           </div>
         </div>
 

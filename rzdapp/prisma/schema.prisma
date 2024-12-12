@@ -7,8 +7,18 @@ generator client {
   provider = "prisma-client-js"
 }
 
+
 model User {
-  id             Int              @id @default(autoincrement())
-  username       String @unique
-  password       String
+  id        Int     @id @default(autoincrement())
+  username  String  @unique
+  password  String
+  name      String
+  position  String
+  experience String
+  email     String  @unique
+  phone     String
+  address   String
+  avatar    String  @default("../img/default-avatar.jpg")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

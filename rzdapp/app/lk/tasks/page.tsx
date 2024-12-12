@@ -11,7 +11,7 @@ interface Task {
 const TasksPage = () => {
   const tasks: Task[] = [
     { id: 1, title: 'Проверка вагонов', deadline: '2024-12-02', status: 'В процессе' },
-    { id: 2, title: 'Отчёт о безопасности', deadline: '2024-12-04', status: 'Ожидает' },
+    { id: 2, title: 'Отчёт о безопасности', deadline: '2024-12-04', status: 'В процессе' },
     { id: 3, title: 'Проверка оборудования', deadline: '2024-12-05', status: 'Ожидает' },
     { id: 4, title: 'Проверка оборудования', deadline: '2024-12-05', status: 'Ожидает' },
     { id: 5, title: 'Проверка', deadline: '2024-12-05', status: 'В процессе' },
