@@ -1,26 +1,38 @@
 import React from 'react';
+import Link from 'next/link';
+import { FaHeadset, FaQuestionCircle } from 'react-icons/fa';
 
 const SupportPage: React.FC = () => {
-  const tasks = [
-    { title: 'Проверка вагонов', deadline: '2024-12-02', status: 'В процессе' },
-    { title: 'Отчёт о безопасности', deadline: '2024-12-04', status: 'Ожидает' },
-    { title: 'Проверка оборудования', deadline: '2024-12-05', status: 'Завершено' },
-  ];
-
   return (
-    <section className=' p-6 m-4 bg-white bg-opacity-30 backdrop-blur rounded-lg shadow-lg border-2 border-red-500'>
-        <div className="p-1 bg-white bg-opacity-90 rounded-lg mb-1 text-center border-2 border-red-500">
-            <h1 className="text-3xl font-semibold text-red-500">Поддержка и FAQ</h1>
-        </div>
-        <div>
-            <div className="p-1 bg-white bg-opacity-90 rounded-lg mb-1 text-center border border-red-500">
-                <h2 className="text-2xl font-semibold text-red-500">Выберите что вам необходимо</h2>
-            </div>
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 mt-4 pb-4'>
-                <button className='mb-10 p-10 bg-red-500 text-white text-3xl'>Чат с поддержкой</button>
-                <button className='mb-10 p-10 bg-red-500 text-white text-3xl'>FAQ</button>
-            </div>
-        </div>
+    <section className="p-8 m-6 bg-white bg-opacity-30 backdrop-blur rounded-lg shadow-lg border-2 border-red-500">
+      <div className="p-4 bg-white bg-opacity-90 rounded-lg mb-6 text-center border-2 border-red-500">
+        <h1 className="text-4xl font-bold text-red-600">Поддержка и FAQ</h1>
+        <p className="text-gray-700 mt-2">Мы здесь, чтобы помочь вам в любое время!</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Link href="/lk/support/chat">
+          <button className="flex items-center justify-center p-8 bg-red-600 text-white text-2xl font-semibold rounded-lg shadow-md hover:bg-red-700 transition-all duration-300">
+            <FaHeadset className="mr-4 text-4xl" /> Чат с поддержкой
+          </button>
+        </Link>
+        <Link href="/lk/support/faq">
+          <button className="flex items-center justify-center p-8 bg-red-600 text-white text-2xl font-semibold rounded-lg shadow-md hover:bg-red-700 transition-all duration-300">
+            <FaQuestionCircle className="mr-4 text-4xl" /> FAQ
+          </button>
+        </Link>
+      </div>
+
+      <div className="mt-8 p-6 bg-white bg-opacity-90 rounded-lg shadow-md border-2 border-red-500">
+        <h2 className="text-3xl font-bold text-red-600 mb-4">Свяжитесь с нами</h2>
+        <form className="space-y-4">
+          <input type="text" placeholder="Тема проблемы" className="w-full p-4 border rounded-lg" />
+          <textarea placeholder="Ваше сообщение" rows={4} className="w-full p-4 border rounded-lg"></textarea>
+          <button type="submit" className="w-full p-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-300">
+            Отправить сообщение
+          </button>
+        </form>
+      </div>
     </section>
   );
 };
