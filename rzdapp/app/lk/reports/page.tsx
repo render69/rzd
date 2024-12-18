@@ -31,6 +31,7 @@ const reportsData = [
 const ReportsPage: React.FC = () => {
   const [activeReport, setActiveReport] = useState<number | null>(null);
   const [editedReport, setEditedReport] = useState<{ id: number; title: string; summary: string } | null>(null);
+  
 
   const openReportModal = (id: number) => {
     const report = reportsData.find((report) => report.id === id);
@@ -61,6 +62,8 @@ const ReportsPage: React.FC = () => {
     closeReportModal();
   };
 
+  
+  
   return (
     <section className="min-h-screen p-16 m-8 bg-white bg-opacity-30 backdrop-blur rounded-lg shadow-lg border-4 border-red-500">
       <div className="p-8 bg-white bg-opacity-90 rounded-lg mb-8 text-center border-4 border-red-500">
@@ -95,7 +98,6 @@ const ReportsPage: React.FC = () => {
           </article>
         ))}
       </div>
-
       {activeReport && editedReport && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="p-8 max-w-2xl bg-white rounded-lg shadow-lg border-4 border-red-500">
@@ -121,6 +123,16 @@ const ReportsPage: React.FC = () => {
                 value={editedReport.summary}
                 onChange={handleInputChange}
                 rows={6}
+                className="w-full p-3 bg-white rounded-lg border-2 border-gray-300 mt-2"
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="file" className="block text-lg font-semibold text-gray-700">Прикрепить файл</label>
+              <input
+                id="file"
+                name="file"
+                type="file"
+                onChange={(e) => setEditedReport({ ...editedReport})}
                 className="w-full p-3 bg-white rounded-lg border-2 border-gray-300 mt-2"
               />
             </div>

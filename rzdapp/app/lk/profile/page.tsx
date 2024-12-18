@@ -49,7 +49,7 @@ const Profile = () => {
         <div>
           <h1 className="text-3xl font-semibold text-gray-800">{user.name}</h1>
           <p className="text-lg text-gray-600">{user.position}</p>
-          <p className="text-gray-600">Стаж: {user.experience}</p>
+          <p className="text-gray-600">Стаж: {user.experience} года/лет</p>
         </div>
       </div>
 

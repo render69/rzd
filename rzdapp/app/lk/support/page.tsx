@@ -1,8 +1,36 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { FaHeadset, FaQuestionCircle } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
+
+
+interface User {
+  name: string;
+  email: string;
+}
 
 const SupportPage: React.FC = () => {
+  const [user, setUser] = useState<User | null>(null);
+  const [isEditing, setIsEditing] = useState(false); // Состояние редактирования
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const res = await fetch('/api/user');
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data);
+      }
+    };
+
+    fetchUser();
+  }, []);
+  if (!user) {
+    return <div className="p-8">Загрузка профиля...</div>;
+  }
+
+
   return (
     <section className="p-8 m-6 bg-white bg-opacity-30 backdrop-blur rounded-lg shadow-lg border-2 border-red-500">
       <div className="p-4 bg-white bg-opacity-90 rounded-lg mb-6 text-center border-2 border-red-500">
@@ -25,6 +53,7 @@ const SupportPage: React.FC = () => {
 
       <div className="mt-8 p-6 bg-white bg-opacity-90 rounded-lg shadow-md border-2 border-red-500">
         <h2 className="text-3xl font-bold text-red-600 mb-4">Свяжитесь с нами</h2>
+        <h3 className="text-1xl text-red-600 mb-4">Сообщение будет отправлено на почту службы поддерджки. Ответ вы получите на {user.email}</h3>
         <form className="space-y-4">
           <input type="text" placeholder="Тема проблемы" className="w-full p-4 border rounded-lg" />
           <textarea placeholder="Ваше сообщение" rows={4} className="w-full p-4 border rounded-lg"></textarea>
