@@ -11,7 +11,7 @@ rzdapp/node_modules
 # next.js
 /.next/
 /out/
-rzdapp/.env
+rzdapp/*.env
 # production
 /build
 
