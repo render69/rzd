@@ -112,11 +112,11 @@ const Lk = () => {
                             <p className="text-gray-600">Ветер: {weather.windSpeed} м/с</p>
                         </div>
                     </div>
-                    <div className="mt-4 border border-red-500">
+                    <div className="mt-4 border border-red-500 w-16 h-16">
                         <img
                             src={`http://openweathermap.org/img/wn/${weather.icon}.png`}
                             alt={weather.description}
-                            className="w-full h-full object-cover w-16 h-16"
+                            className="w-full h-full object-cover"
                         />
                     </div>
                 </div>

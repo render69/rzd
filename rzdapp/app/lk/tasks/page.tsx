@@ -1,37 +1,44 @@
-"use client"
-import React from 'react';
+"use client";
+import React, { useState } from 'react';
 
 interface Task {
   id: number;
   title: string;
   deadline: string;
   status: 'В процессе' | 'Ожидает' | 'Завершено';
+  description: string;
 }
 
 const TasksPage = () => {
+  const [expandedTaskId, setExpandedTaskId] = useState<number | null>(null);
+
   const tasks: Task[] = [
-    { id: 1, title: 'Проверка вагонов', deadline: '2024-12-02', status: 'В процессе' },
-    { id: 2, title: 'Отчёт о безопасности', deadline: '2024-12-04', status: 'В процессе' },
-    { id: 3, title: 'Проверка оборудования', deadline: '2024-12-05', status: 'Ожидает' },
-    { id: 4, title: 'Проверка оборудования', deadline: '2024-12-05', status: 'Ожидает' },
-    { id: 5, title: 'Проверка', deadline: '2024-12-05', status: 'В процессе' },
-    { id: 6, title: 'Проверка оборудования', deadline: '2024-12-05', status: 'Ожидает' },
-    { id: 7, title: 'Проверка оборудования 6', deadline: '2024-12-05', status: 'Завершено' },
-    { id: 8, title: 'Проверка оборудования', deadline: '2024-12-05', status: 'Завершено' },
-    { id: 9, title: 'Проверка оборудования 2', deadline: '2024-12-05', status: 'Завершено' },
+    { id: 1, title: 'Проверка вагонов', deadline: '2024-12-02', status: 'В процессе', description: 'Провести проверку всех вагонов в депо и обеспечить их готовность.' },
+    { id: 2, title: 'Отчёт о безопасности', deadline: '2024-12-04', status: 'В процессе', description: 'Подготовить отчёт о соблюдении норм безопасности на предприятии.' },
+    { id: 3, title: 'Проверка оборудования', deadline: '2024-12-05', status: 'Ожидает', description: 'Проверить техническое состояние оборудования на складе.' },
+    { id: 4, title: 'Проверка оборудования', deadline: '2024-12-05', status: 'Ожидает', description: 'Проверить исправность приборов на производстве.' },
+    { id: 5, title: 'Проверка', deadline: '2024-12-05', status: 'В процессе', description: 'Проверить рабочие параметры станков на предприятии.' },
+    { id: 6, title: 'Проверка оборудования', deadline: '2024-12-05', status: 'Ожидает', description: 'Провести плановую проверку всех оборудования.' },
+    { id: 7, title: 'Проверка оборудования 6', deadline: '2024-12-05', status: 'Завершено', description: 'Заключительный этап проверки оборудования на исправность.' },
+    { id: 8, title: 'Проверка оборудования', deadline: '2024-12-05', status: 'Завершено', description: 'Проверить оборудование на производственном участке.' },
+    { id: 9, title: 'Проверка оборудования 2', deadline: '2024-12-05', status: 'Завершено', description: 'Проверка функциональности всего оборудования.' },
   ];
 
   const getStatusClass = (status: Task['status']) => {
     switch (status) {
       case 'В процессе':
-        return 'bg-yellow-100';
+        return 'bg-yellow-100 text-yellow-800';
       case 'Ожидает':
-        return 'bg-red-100';
+        return 'bg-red-100 text-red-800';
       case 'Завершено':
-        return 'bg-green-100';
+        return 'bg-green-100 text-green-800';
       default:
         return 'bg-gray-100';
     }
+  };
+
+  const toggleDescription = (id: number) => {
+    setExpandedTaskId(expandedTaskId === id ? null : id);
   };
 
   return (
@@ -53,11 +60,17 @@ const TasksPage = () => {
               {section.tasks.map(task => (
                 <div
                   key={task.id}
-                  className={`mb-1 p-4 ${getStatusClass(task.status)} rounded-lg shadow border border-red-500`}
+                  className={`mb-4 p-4 ${getStatusClass(task.status)} rounded-lg shadow border border-red-500 cursor-pointer`}
+                  onClick={() => toggleDescription(task.id)}
                 >
-                  <p>Задача: {task.title}</p>
+                  <p className="font-medium">Задача: {task.title}</p>
                   <p>Дедлайн: {task.deadline}</p>
                   <p>Статус: {task.status}</p>
+                  {expandedTaskId === task.id && (
+                    <div className="mt-2 text-gray-700">
+                      <p><strong>Описание:</strong> {task.description}</p>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
