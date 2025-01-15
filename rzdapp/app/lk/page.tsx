@@ -23,11 +23,11 @@ const Lk = () => {
     const [user, setUser] = useState<User | null>(null);
     const [notifications, setNotifications] = useState<string[]>(['Обновление графика смен', 'Новое поручение от руководителя', 'Новое поручение от руководителя', 'Новое поручение от руководителя']);
     const weather = {
-        temp: 22, // температура в градусах Цельсия
-        description: "Облачно", // описание погоды
-        humidity: 65, // влажность в процентах
-        windSpeed: 5.4, // скорость ветра в м/с
-        icon: "04d", // код иконки погоды
+        temp: 22, 
+        description: "Облачно",
+        humidity: 65, 
+        windSpeed: 5.4,
+        icon: "04d",
     };
     
     const router = useRouter();
