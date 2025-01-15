@@ -1,0 +1,40 @@
+# .gitignore для проекта Next.js с TypeScript
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Next.js
+.next/
+out/
+*.next/
+
+# TypeScript
+*.tsbuildinfo
+*.d.ts
+
+# Логи
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Папки для сборки и временные файлы
+dist/
+build/
+
+# Файлы для Git LFS (если используется)
+# Для файлов большого размера
+*.psd
+*.ai
+*.mp4
+
+# Типичные файлы IDE и редакторов
+.vscode/
+.idea/
+
+# Статические файлы для разработки
+public/static/
