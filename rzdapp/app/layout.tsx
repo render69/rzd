@@ -5,12 +5,10 @@ import localFont from "next/font/local";
 import { usePathname } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image'
-import img1 from '../public/lk.jpg'
 import styles1 from './style/header.module.css';
 import { useRouter } from 'next/navigation';
 import { useContext } from 'react';
-
+import {FaUserCircle} from 'react-icons/fa'
 import "./globals.css";
 interface User {
     id: number;
@@ -52,6 +50,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         { id: 5, name: "Моя команда", className: styles1.mainGl, link: '/lk/team', dataHover: "Моя команда" },
         { id: 6, name: "Поддержка", className: styles1.mainGl, link: '/lk/support', dataHover: "Поддержка" },
         { id: 7, name: "Новости", className: styles1.mainGl, link: '/lk/news', dataHover: "Новости" },
+        { id: 8, name: "Обучение", className: styles1.mainGl, link: '/lk/learning', dataHover: "Обучение" },
     ];
     return (
         <html lang="ru">
@@ -73,12 +72,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                             </nav>
                             <div className={styles1.leftPatel}>
                                 <Link href="/lk/profile">
-                                    <Image
-                                        src={img1}
-                                        alt="avatar"
-                                        className={styles1.userImg}
-                                        priority
-                                    />
+                                    <FaUserCircle className="text-red-600 text-5xl mr-5"/>
                                 </Link>
                             </div>
                         </header>

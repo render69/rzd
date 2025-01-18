@@ -14,21 +14,27 @@ interface Shift {
 
 const ShiftCard = ({ shift }: { shift: Shift }) => {
     return (
-        <div className="p-4 bg-white rounded-lg shadow border border-red-500">
-            <div className="flex items-center">
-                <span className={`mr-2 text-xl ${shift.type === 'Дневная' ? 'text-yellow-500' : 'text-blue-500'}`}>
+        <div className="p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow border-2 border-red-500 transform hover:scale-105">
+            <div className="flex items-center mb-4">
+                <span className={`mr-3 text-4xl ${shift.type === 'Дневная' ? 'text-yellow-500' : 'text-blue-500'}`}>
                     {shift.type === 'Дневная' ? '☀️' : '🌙'}
                 </span>
-                <p className="font-medium">Дата: {shift.date}</p>
+                <div>
+                    <p className="text-xl font-semibold">{shift.date}</p>
+                    <p className="text-sm text-gray-500">{shift.startTime} - {shift.endTime}</p>
+                </div>
             </div>
-            <p>Время: {shift.startTime} - {shift.endTime}</p>
-            <p>Тип: {shift.type}</p>
+            <div className="text-gray-700">
+                <p>Тип: <span className={`font-medium ${shift.type === 'Дневная' ? 'text-yellow-500' : 'text-blue-500'}`}>{shift.type}</span></p>
+                <p>Статус: <span className={`font-medium ${shift.status === 'Текущая' ? 'text-red-600' : shift.status === 'Предстоящая' ? 'text-green-600' : 'text-gray-500'}`}>{shift.status}</span></p>
+            </div>
         </div>
     );
 };
 
 const SchedulePage = () => {
     const [filterStatus, setFilterStatus] = useState<'Все' | 'Текущая' | 'Предстоящая' | 'Прошедшая'>('Все');
+    const [filterType, setFilterType] = useState<'Все' | 'Дневная' | 'Ночная'>('Все');
 
     const testShifts: Shift[] = [
         { id: 1, date: '2024-12-09', startTime: '08:00', endTime: '20:00', type: 'Дневная', status: 'Текущая' },
@@ -40,18 +46,19 @@ const SchedulePage = () => {
         { id: 7, date: '2024-12-07', startTime: '08:00', endTime: '20:00', type: 'Дневная', status: 'Прошедшая' },
     ];
 
-    const filteredShifts = filterStatus === 'Все' ? testShifts : testShifts.filter(shift => shift.status === filterStatus);
+    const filteredShifts = testShifts
+        .filter(shift => (filterStatus === 'Все' || shift.status === filterStatus) && (filterType === 'Все' || shift.type === filterType));
 
     return (
         <div className="p-6 m-4 bg-white bg-opacity-50 backdrop-blur rounded-lg shadow-lg border-2 border-red-500">
-            <div className="p-1 bg-white bg-opacity-90 rounded-lg mb-1 text-center border-2 border-red-500">
+            <div className="p-1 bg-white bg-opacity-90 rounded-lg mb-4 text-center border-2 border-red-500">
                 <h1 className="text-3xl font-semibold text-red-500">Ваше расписание смен</h1>
             </div>
 
             {/* Фильтрация смен */}
-            <div className="mb-6 text-center">
+            <div className="m-4 text-center space-x-4">
                 <select
-                    className="bg-white border border-red-500 rounded-lg p-2"
+                    className="bg-white border-2 border-red-500 rounded-lg p-2"
                     onChange={(e) => setFilterStatus(e.target.value as 'Все' | 'Текущая' | 'Предстоящая' | 'Прошедшая')}
                     value={filterStatus}
                 >
@@ -60,17 +67,26 @@ const SchedulePage = () => {
                     <option value="Предстоящая">Предстоящие смены</option>
                     <option value="Прошедшая">Прошедшие смены</option>
                 </select>
+                <select
+                    className="bg-white border-2 border-red-500 rounded-lg p-2"
+                    onChange={(e) => setFilterType(e.target.value as 'Все' | 'Дневная' | 'Ночная')}
+                    value={filterType}
+                >
+                    <option value="Все">Все типы смен</option>
+                    <option value="Дневная">Дневные смены</option>
+                    <option value="Ночная">Ночные смены</option>
+                </select>
             </div>
 
             {/* Текущая смена */}
             {testShifts.some(shift => shift.status === 'Текущая') && (
-                <div className="mb-6 p-4 bg-opacity-90 bg-red-100 rounded-lg shadow border border-red-500">
+                <div className="mb-6 p-4 bg-opacity-90 bg-red-100 rounded-lg shadow border-2 border-red-500">
                     <h2 className="text-xl font-medium mb-2">Текущая смена</h2>
                     {testShifts.filter(shift => shift.status === 'Текущая').map(shift => (
                         <ShiftCard key={shift.id} shift={shift} />
                     ))}
                     <Link href="/lk/tasks">
-                        <button className="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                        <button className="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors">
                             Просмотреть текущие задачи
                         </button>
                     </Link>
@@ -79,9 +95,13 @@ const SchedulePage = () => {
 
             {/* Остальные смены */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredShifts.map(shift => (
-                    <ShiftCard key={shift.id} shift={shift} />
-                ))}
+                {filteredShifts.length > 0 ? (
+                    filteredShifts.map(shift => (
+                        <ShiftCard key={shift.id} shift={shift} />
+                    ))
+                ) : (
+                    <p className="text-center text-gray-600">Нет доступных смен по выбранным фильтрам.</p>
+                )}
             </div>
         </div>
     );

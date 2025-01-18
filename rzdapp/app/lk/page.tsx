@@ -63,7 +63,7 @@ const Lk = () => {
 
     return (
         <div className="p-6 m-4 bg-white bg-opacity-30 backdrop-blur rounded-lg shadow-lg border-2 border-red-500">
-            <div className="flex items-center mb-6 border border-red-500 bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-6">
+            <div className="flex items-center mb-6 border-2 border-red-500 bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-6">
                 <div className="w-16 h-16 bg-gray-300 rounded-full flex-shrink-0">
                     {user.avatar ? (
                         <img src={user.avatar} alt="avatar" className="w-full h-full rounded-full object-cover" />
@@ -78,7 +78,7 @@ const Lk = () => {
                 </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-6 border border-red-500">
+                <div className="bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-6 border-2 border-red-500">
                     <h2 className="text-xl font-semibold text-red-600">Сегодня ваша смена</h2>
                     <p className="text-gray-700">Дневная смена</p>
                     <button className="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
@@ -86,7 +86,7 @@ const Lk = () => {
                     </button>
                 </div>
 
-                <div className="bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-6 border border-red-500">
+                <div className="bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-6 border-2 border-red-500">
                     <h2 className="text-xl font-semibold text-red-600">Ваши задачи</h2>
                     <p className="text-gray-700">3 активные задачи</p>
                     <Link href="/lk/tasks">
@@ -96,7 +96,7 @@ const Lk = () => {
                     </Link>
                 </div>
 
-                <div className="bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-6 border border-red-500 grid grid-cols-3">
+                <div className="bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-6 border-2 border-red-500 grid grid-cols-3">
                     <div>
 
                     <h2 className="text-xl font-semibold text-red-600">Погода</h2>
@@ -112,7 +112,7 @@ const Lk = () => {
                             <p className="text-gray-600">Ветер: {weather.windSpeed} м/с</p>
                         </div>
                     </div>
-                    <div className="mt-4 border border-red-500 w-16 h-16">
+                    <div className="mt-4 border-2 border-red-500 w-16 h-16">
                         <img
                             src={`http://openweathermap.org/img/wn/${weather.icon}.png`}
                             alt={weather.description}
@@ -123,7 +123,7 @@ const Lk = () => {
 
             </div>
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-6 border border-red-500 flex justify-between items-center">
+                <div className="bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-6 border-2 border-red-500 flex justify-between items-center">
                     <div>
                         <h2 className="text-xl font-semibold text-red-600">Достижения</h2>
                         <ul className="list-disc list-inside text-gray-700">
@@ -149,7 +149,7 @@ const Lk = () => {
                     </div>
                 </div>
 
-                <div className="bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-6 border border-red-500 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
+                <div className="bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-6 border-2 border-red-500 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
                     <div className="flex-1">
                         <h2 className="text-xl font-semibold text-red-600">Статистика</h2>
                         <p className="text-gray-700">Задачи: 80% выполнено</p>
@@ -182,7 +182,7 @@ const Lk = () => {
                 </div>
                 <ul className="space-y-1 mt-2">
                     {notifications.map((note, index) => (
-                        <li key={index} className="p-2 bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 border border-red-500">
+                        <li key={index} className="p-2 bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 border-2 border-red-500">
                             {note}
                         </li>
                     ))}

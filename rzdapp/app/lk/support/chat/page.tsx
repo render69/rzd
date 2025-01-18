@@ -9,13 +9,13 @@ const ChatPage = () => {
         <h1 className="text-4xl font-semibold text-gray-800 mb-6 text-center">
           Чат с поддержкой
         </h1>
-        <div className="flex flex-col items-center justify-center space-y-8 h-full border border-red-500 shadow-lg rounded-lg">
+        <div className="flex flex-col items-center justify-center space-y-8 h-full border-2 border-red-500 shadow-lg rounded-lg">
           <div className="w-full bg-white p-8 rounded-lg">
             <div className="flex items-center mb-6">
               <FaCommentDots className="mr-4 text-4xl text-red-600" />
               <h2 className="text-3xl font-semibold">Начните чат с нами</h2>
             </div>
-            <div className="bg-gray-100 p-6 rounded-lg mb-6 border border-red-500">
+            <div className="bg-gray-100 p-6 rounded-lg mb-6 border-2 border-red-500">
               <p className="text-gray-700 text-lg">Добрый день! Чем мы можем помочь?</p>
             </div>
             <div className="mt-6 flex flex-col items-start space-y-4 w-full">

@@ -58,8 +58,8 @@ const NewsPage: React.FC = () => {
   };
 
   return (
-    <section className="min-h-screen p-16 m-8 bg-white bg-opacity-30 backdrop-blur rounded-lg shadow-lg border-4 border-red-500">
-      <div className="p-8 bg-white bg-opacity-90 rounded-lg mb-8 text-center border-4 border-red-500">
+    <section className="p-6 m-4 bg-white bg-opacity-30 backdrop-blur rounded-lg shadow-lg border-2 border-red-500">
+      <div className="p-8 bg-white bg-opacity-90 rounded-lg mb-8 text-center border-2 border-red-500">
         <h1 className="text-4xl font-bold text-red-600">Новости компании</h1>
         <p className="text-gray-700 mt-4 text-xl">Будьте в курсе последних обновлений и событий.</p>
       </div>
@@ -68,7 +68,7 @@ const NewsPage: React.FC = () => {
         {newsData.map((news) => (
           <article
             key={news.id}
-            className="p-8 bg-white bg-opacity-90 rounded-lg shadow-md border-4 border-red-500 cursor-pointer flex items-center"
+            className="p-8 bg-white bg-opacity-90 rounded-lg shadow-md border-2 border-red-500 cursor-pointer flex items-center"
             onClick={() => openNewsModal(news.id)}
           >
             <img
@@ -86,7 +86,7 @@ const NewsPage: React.FC = () => {
 
       {activeNews && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="p-8 max-w-2xl bg-white rounded-lg shadow-lg border-4 border-red-500">
+          <div className="p-8 max-w-2xl bg-white rounded-lg shadow-lg border-2 border-red-500">
             <h2 className="text-4xl font-bold text-red-600 mb-4">
               {newsData.find((news) => news.id === activeNews)?.title}
             </h2>

@@ -4,7 +4,6 @@ import styles from "./style/Home.module.css";
 import rzdlipmain from "../public/lk.jpg";
 import Image from "next/image";
 import { useState } from 'react';
-import { useRouter } from 'next/navigation'; // Убедись, что используешь из next/navigation
 
 const Page = () => {
     const [username, setUsername] = useState('');
@@ -22,16 +21,14 @@ const Page = () => {
         });
 
         if (res.ok) {
-            // Если вход успешен, перенаправляем на другую страницу
             console.log('Успешный вход');
-            window.location.href = '/lk'; // Редирект на страницу панели управления
+            window.location.href = '/lk';
         } else {
             const data = await res.json();
-            console.error('Ошибка: ', data.message);  // Вывод ошибки с сервера
-            alert('Ошибка авторизации: ' + data.message); // Покажите пользователю сообщение об ошибке
+            console.error('Ошибка: ', data.message);
+            alert('Ошибка авторизации: ' + data.message);
         }
     };
-
 
     return (
         <div className={`${styles.bodydiv} bg-white bg-opacity-30 backdrop-blur rounded-lg shadow-lg`}>
@@ -71,4 +68,4 @@ const Page = () => {
     );
 };
 
-export default Page;  // Экспортируем LoginPage, а не Page
+export default Page;
