@@ -9,6 +9,8 @@ import styles1 from './style/header.module.css';
 import { useRouter } from 'next/navigation';
 import { useContext } from 'react';
 import {FaUserCircle} from 'react-icons/fa'
+import Image from "next/image";
+import logo from '../public/logorzd.png';
 import "./globals.css";
 interface User {
     id: number;
@@ -58,7 +60,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                 <div className={styles1.container123}>
                     {!hideHeaderFooter &&
                         <header className={styles1.header}>
-                            <h1 className="text-xl font-semibold text-red-600 m-7">РЖД</h1>
+                            <Image src={logo} alt="Logo" className="w-16 m-4"/>
                             <nav className={styles1.nav}>
                                 <ul className={styles1.ulhead}>
                                     {navigate.map(({ id, name, link, dataHover }) => (
