@@ -5,13 +5,19 @@ import { useState, useEffect } from 'react';
 import { FaEnvelope, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
 
 interface User {
-    avatar: string;
-    name: string;
-    position: string;
-    experience: string;
-    email: string;
-    phone: string;
-    address: string;
+    avatar: string; /// Ссылка на аватар пользователя
+    username: string; /// Уникальное имя пользователя для входа
+    name: string; /// Имя пользователя
+    surname: string;                            /// Фамилия пользователя
+    patronymic: string;                            /// Отчество пользователя
+    city: string;                          /// Город проживания
+    street: string;                       /// Улица
+    house: string;                           /// Номер дома
+    apartment: string;                           /// Номер квартиры
+    experience: number;                                   /// Опыт работы (в годах)
+    post: string;                        /// Должность пользователя
+    email: string;                  /// Уникальный email пользователя
+    phone: string;                           /// Номер телефона пользователя
 }
 
 const Profile = () => {
@@ -46,13 +52,18 @@ const Profile = () => {
                             height={120}
                             className="w-32 h-32 rounded-full object-cover shadow-lg hover:scale-110 transition-transform duration-300 ease-in-out"
                         />
-                        <div className="absolute top-0 right-0 bg-red-600 text-white rounded-full p-1 text-sm">
-                            {user.position}
+                        <div className="absolute top-0 right-0 bg-red-500 text-white rounded-full px-2 py-1 text-xs font-bold shadow-md">
+                            {user.post}
                         </div>
                     </div>
                     <div>
-                        <h1 className="text-3xl font-semibold text-gray-800">{user.name}</h1>
+                        <h1 className="text-3xl font-semibold text-gray-800">
+                            {user.surname} {/*Фамилия пользователя*/}
+                            {user.name} {/*Имя пользователя*/}
+                            {user.patronymic} {/*Отчество пользователя*/}
+                        </h1>
                         <p className="text-lg text-gray-600">Стаж: {user.experience} года/лет</p>
+                        <p className="text-gray-600">Логин: {user.username}</p>
                     </div>
                 </div>
                 <div className="mt-6 space-y-4">
@@ -71,7 +82,11 @@ const Profile = () => {
                     <div className="flex items-center space-x-2 p-4 bg-white bg-opacity-70 rounded-xl shadow-lg hover:bg-red-50 transition duration-300 ease-in-out">
                         <FaMapMarkerAlt className="text-red-600 text-2xl" />
                         <p className="text-gray-800">
-                            <strong>Адрес:</strong> {user.address}
+                            <strong>Адрес: </strong>
+                            г.{user.city} {/* Город проживания*/}
+                            ул.{user.street} {/* Улица*/}
+                            д.{user.house} {/* Номер дома*/}
+                            кв.{user.apartment} {/* Номер квартиры */}
                         </p>
                     </div>
                 </div>
@@ -111,13 +126,49 @@ const Profile = () => {
                         </div>
                         <div>
                             <label htmlFor="address" className="block text-lg font-medium text-gray-700">
-                                Адрес
+                                Город
                             </label>
                             <input
                                 id="address"
                                 type="text"
-                                value={user.address}
-                                onChange={(e) => setUser({ ...user, address: e.target.value })}
+                                value={user.city}
+                                onChange={(e) => setUser({ ...user, city: e.target.value })}
+                                className="w-full p-3 bg-white rounded-lg border-2 border-gray-300 mt-2 focus:outline-none focus:ring-2 focus:ring-red-600"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="address" className="block text-lg font-medium text-gray-700">
+                                Улица
+                            </label>
+                            <input
+                                id="address"
+                                type="text"
+                                value={user.street}
+                                onChange={(e) => setUser({ ...user, street: e.target.value })}
+                                className="w-full p-3 bg-white rounded-lg border-2 border-gray-300 mt-2 focus:outline-none focus:ring-2 focus:ring-red-600"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="address" className="block text-lg font-medium text-gray-700">
+                                Дом
+                            </label>
+                            <input
+                                id="address"
+                                type="text"
+                                value={user.house}
+                                onChange={(e) => setUser({ ...user, house: e.target.value })}
+                                className="w-full p-3 bg-white rounded-lg border-2 border-gray-300 mt-2 focus:outline-none focus:ring-2 focus:ring-red-600"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="address" className="block text-lg font-medium text-gray-700">
+                                Квартира
+                            </label>
+                            <input
+                                id="address"
+                                type="text"
+                                value={user.apartment}
+                                onChange={(e) => setUser({ ...user, apartment: e.target.value })}
                                 className="w-full p-3 bg-white rounded-lg border-2 border-gray-300 mt-2 focus:outline-none focus:ring-2 focus:ring-red-600"
                             />
                         </div>

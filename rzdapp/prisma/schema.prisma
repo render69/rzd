@@ -7,112 +7,90 @@ generator client {
   provider = "prisma-client-js"
 }
 
+/// Таблица пользователей
 model User {
-  id         Int      @id @default(autoincrement())
-  username   String   @unique
-  password   String
-  name       String
-  position   String
-  experience String
-  email      String   @unique
-  phone      String
-  address    String
-  avatar     String   @default("../img/default-avatar.jpg")
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id         Int      @id @default(autoincrement()) /// Уникальный идентификатор пользователя
+  username   String   @unique                      /// Уникальное имя пользователя для входа
+  password   String                                /// Пароль пользователя
+  name       String                                /// Имя пользователя
+  surname    String  @default("")                              /// Фамилия пользователя
+  patronymic String  @default("")                              /// Отчество пользователя
 
-  // Обратные связи
-  enrollments      Enrollment[]
-  teamsAsMember    Team[]       @relation("TeamMembers")
-  teamsAsLeader    Team[]       @relation("TeamLeader")
-  sentMessages     Message[]    @relation("SentMessages")
-  receivedMessages Message[]    @relation("ReceivedMessages")
-  shifts           Shift[] // Новая обратная связь
-  tasks            Task[] // Новая обратная связь
-  reports          Report[] // Новая обратная связь
+  /// Адрес пользователя
+  city       String   @default("")                             /// Город проживания
+  street     String   @default("")                             /// Улица
+  house      String   @default("")                             /// Номер дома
+  apartment  String    @default("")                            /// Номер квартиры
+
+  experience Int                                   /// Опыт работы (в годах)
+  post       String   @default("")                             /// Должность пользователя
+  
+  email      String   @unique                      /// Уникальный email пользователя
+  phone      String                                /// Номер телефона пользователя
+  avatar     String   @default("../img/default-avatar.jpg") /// Ссылка на аватар пользователя
+
+  /// Связи
+  tasks      Task[]                                /// Задачи пользователя
+  reports    Report[]                              /// Отчёты пользователя
+  shifts     Shifts[]                              /// Смены пользователя
+  team       Team?     @relation(fields: [teamId], references: [id]) /// Команда пользователя
+  teamId     Int?                                  /// ID команды пользователя (если есть)
 }
 
-model Shift {
-  id          Int      @id @default(autoincrement())
-  user        User     @relation(fields: [userId], references: [id])
-  userId      Int
-  startTime   DateTime
-  endTime     DateTime
-  description String
-  tasks       Task[] // Связь с задачами в рамках смены
+/// Таблица смен
+model Shifts {
+  id          Int      @id @default(autoincrement()) /// Уникальный идентификатор смены
+  startTime   DateTime                              /// Время начала смены
+  endTime     DateTime                              /// Время окончания смены
+  type        String                                /// Тип смены (DAY или NIGHT)
+
+  /// Связи
+  tasks       Task[]                                /// Список задач в смене
+  userId      Int                                   /// ID пользователя, работающего в смену
+  user        User     @relation(fields: [userId], references: [id]) /// Пользователь
 }
 
+/// Таблица задач
 model Task {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String
-  assignedTo  User     @relation(fields: [userId], references: [id])
-  userId      Int
-  shift       Shift?   @relation(fields: [shiftId], references: [id])
-  shiftId     Int?
-  deadline    DateTime
-  dueDate     DateTime
-  isCompleted Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id          Int      @id @default(autoincrement()) /// Уникальный идентификатор задачи
+  title       String                                /// Название задачи
+  description String                                /// Описание задачи
+  deadline    DateTime                              /// Дедлайн задачи
+  status      String                                /// Статус задачи (PENDING, IN_PROGRESS, COMPLETED)
+  priority    String                                /// Приоритет задачи (LOW, MEDIUM, HIGH)
+
+  /// Связи
+  userId      Int                                   /// ID пользователя, которому назначена задача
+  user        User     @relation(fields: [userId], references: [id]) /// Связь с пользователем
+  shiftId     Int?                                  /// ID смены, в которой выполняется задача (если есть)
+  shift       Shifts?   @relation(fields: [shiftId], references: [id]) /// Связь со сменой
 }
 
+/// Таблица отчётов
 model Report {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         Int      @id @default(autoincrement()) /// Уникальный идентификатор отчёта
+  title      String                                /// Заголовок отчёта
+  content    String                                /// Содержание отчёта
+  createdAt  DateTime @default(now())               /// Время создания отчёта
+  updatedAt  DateTime @updatedAt                    /// Время последнего обновления отчёта
+  ownerId    Int                                   /// ID пользователя, создавшего отчёт
+  owner      User     @relation(fields: [ownerId], references: [id]) /// Связь с пользователем
+
+  /// Вложения к отчёту
+  attachments ReportAttachment[]                    /// Список вложений
 }
 
-model Instruction {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+/// Таблица вложений к отчётам
+model ReportAttachment {
+  id        Int      @id @default(autoincrement()) /// Уникальный идентификатор вложения
+  filePath  String                                /// Путь к файлу вложения
+  reportId  Int                                   /// ID отчёта, к которому относится вложение
+  report    Report   @relation(fields: [reportId], references: [id]) /// Связь с отчётом
 }
 
-model TrainingCourse {
-  id          Int          @id @default(autoincrement())
-  title       String
-  description String
-  content     String
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  enrollments Enrollment[]
-}
-
-model Enrollment {
-  id         Int            @id @default(autoincrement())
-  user       User           @relation(fields: [userId], references: [id])
-  userId     Int
-  course     TrainingCourse @relation(fields: [courseId], references: [id])
-  courseId   Int
-  progress   Float          @default(0.0) // Процент завершения курса
-  completed  Boolean        @default(false)
-  enrolledAt DateTime       @default(now())
-}
-
+/// Таблица команд
 model Team {
-  id        Int      @id @default(autoincrement())
-  name      String
-  members   User[]   @relation("TeamMembers")
-  leader    User     @relation("TeamLeader", fields: [leaderId], references: [id])
-  leaderId  Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Message {
-  id         Int       @id @default(autoincrement())
-  content    String
-  sender     User      @relation("SentMessages", fields: [senderId], references: [id])
-  senderId   Int
-  receiver   User      @relation("ReceivedMessages", fields: [receiverId], references: [id])
-  receiverId Int
-  sentAt     DateTime  @default(now())
-  readAt     DateTime?
+  id        Int      @id @default(autoincrement()) /// Уникальный идентификатор команды
+  name      String                                /// Название команды
+  members   User[]                                /// Участники команды
 }
