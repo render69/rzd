@@ -20,16 +20,29 @@ interface User {
 }
 
 const Lk = () => {
+    const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+
+    const notifications = [
+        { title: 'Смена на завтра', details: 'У вас назначена смена на завтра с 8:00 до 16:00.' },
+        { title: 'Инструктаж', details: 'Не забудьте пройти инструктаж по технике безопасности.' },
+        { title: 'Собрание отдела', details: 'Собрание отдела в пятницу в 14:00 в комнате 305.' },
+    ];
+    const [expandedIndexes, setExpandedIndexes] = useState<number[]>([]);
+
+    const toggleDetails = (index: number) => {
+        setExpandedIndexes((prev) =>
+            prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+        );
+    };
     const [user, setUser] = useState<User | null>(null);
-    const [notifications, setNotifications] = useState<string[]>(['Обновление графика смен', 'Новое поручение от руководителя', 'Новое поручение от руководителя', 'Новое поручение от руководителя']);
     const weather = {
-        temp: 22, 
+        temp: 22,
         description: "Облачно",
-        humidity: 65, 
+        humidity: 65,
         windSpeed: 5.4,
         icon: "04d",
     };
-    
+
     const router = useRouter();
     const data = [
         { name: 'Январь', задачи: 80, смены: 90 },
@@ -77,7 +90,7 @@ const Lk = () => {
                     <p className="text-sm text-gray-600">Роль: {user.position}</p>
                 </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-6 border-2 border-red-500">
                     <h2 className="text-xl font-semibold text-red-600">Сегодня ваша смена</h2>
                     <p className="text-gray-700">Дневная смена</p>
@@ -95,32 +108,6 @@ const Lk = () => {
                         </button>
                     </Link>
                 </div>
-
-                <div className="bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-6 border-2 border-red-500 grid grid-cols-3">
-                    <div>
-
-                    <h2 className="text-xl font-semibold text-red-600">Погода</h2>
-                    <p className="text-gray-700">{weather.temp}°C — {weather.description}</p>
-                    </div>
-                    <div className="flex items-center">
-                        <div className="flex items-center">
-                            <i className="fas fa-tint text-blue-500 mr-2"></i>
-                            <p className="text-gray-600">Влажность: {weather.humidity}%</p>
-                        </div>
-                        <div className="flex items-center">
-                            <i className="fas fa-wind text-gray-600 mr-2"></i>
-                            <p className="text-gray-600">Ветер: {weather.windSpeed} м/с</p>
-                        </div>
-                    </div>
-                    <div className="mt-4 border-2 border-red-500 w-16 h-16">
-                        <img
-                            src={`http://openweathermap.org/img/wn/${weather.icon}.png`}
-                            alt={weather.description}
-                            className="w-full h-full object-cover"
-                        />
-                    </div>
-                </div>
-
             </div>
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-6 border-2 border-red-500 flex justify-between items-center">
@@ -176,14 +163,33 @@ const Lk = () => {
                     </div>
                 </div>
             </div>
-            <div className="mt-8">
-                <div className="p-1 bg-white rounded-lg mb-1 text-center border-2 border-red-500">
-                    <h3 className="text-2xl font-semibold text-red-500">Уведомления:</h3>
+
+            <div className="mt-8 bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-4 border-2 border-red-500">
+                <div className="mb-4 text-center">
+                    <h3 className="border-b border-red-500 text-xl font-semibold text-red-600">Уведомления</h3>
                 </div>
-                <ul className="space-y-1 mt-2">
+                <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                     {notifications.map((note, index) => (
-                        <li key={index} className="p-2 bg-white rounded-lg shadow-sm hover:shadow-lg transition-all duration-300 border-2 border-red-500">
-                            {note}
+                        <li
+                            key={index}
+                            className="bg-white rounded-lg shadow border-2 border-red-400 p-3 hover:shadow-lg transition-all duration-200 text-sm"
+                        >
+                            <div className="flex flex-col gap-2">
+                                <button
+                                    onClick={() => toggleDetails(index)}
+                                    className="text-left text-gray-700 font-medium hover:bg-gray-300 bg-gray-200 rounded-lg px-2 py-1"
+                                >
+                                    📌 {note.title}
+                                </button>
+                                {expandedIndexes.includes(index) && (
+                                    <p className="text-gray-600 text-sm">{note.details}</p>
+                                )}
+                                <div className="flex justify-end gap-2">
+                                    <button className='bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded text-xs font-medium'>✔</button>
+                                    <button className='bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium'>👁️</button>
+                                    <button className='bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs font-medium'>✖</button>
+                                </div>
+                            </div>
                         </li>
                     ))}
                 </ul>
