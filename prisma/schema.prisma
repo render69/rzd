@@ -66,6 +66,14 @@ model Task {
   shift       Shifts?   @relation(fields: [shiftId], references: [id]) /// Связь со сменой
 }
 
+model Notification {
+  id        Int      @id @default(autoincrement())
+  title     String
+  details   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
 /// Таблица отчётов
 model Report {
   id         Int      @id @default(autoincrement()) /// Уникальный идентификатор отчёта

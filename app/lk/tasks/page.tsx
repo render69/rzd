@@ -23,6 +23,8 @@ const TasksPage = () => {
     { id: 9, title: 'Проверка оборудования 2', deadline: '2024-12-05', status: 'Завершено', description: 'Проверка функциональности всего оборудования.' },
   ]);
 
+  const [filter, setFilter] = useState<'Все' | Task['status']>('Все');
+
   const getStatusClass = (status: Task['status']) => {
     switch (status) {
       case 'В процессе':
@@ -64,8 +66,17 @@ const TasksPage = () => {
     );
   };
 
+  const filterTasks = (status: 'Все' | Task['status']) => {
+    setFilter(status);
+  };
+
+  const filteredTasks = tasks.filter((task) => {
+    if (filter === 'Все') return true;
+    return task.status === filter;
+  });
+
   const filterTasksByStatus = (status: Task['status']) => {
-    return tasks.filter(task => task.status === status);
+    return filteredTasks.filter(task => task.status === status);
   };
 
   return (
@@ -77,25 +88,25 @@ const TasksPage = () => {
       {/* Фильтрация задач */}
       <div className="flex justify-center space-x-4 my-4">
         <button
-          onClick={() => setTasks(tasks)}
+          onClick={() => filterTasks('Все')}
           className="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400"
         >
           Все задачи
         </button>
         <button
-          onClick={() => setTasks(filterTasksByStatus('В процессе'))}
+          onClick={() => filterTasks('В процессе')}
           className="px-4 py-2 bg-yellow-300 rounded-md hover:bg-yellow-400"
         >
           В процессе
         </button>
         <button
-          onClick={() => setTasks(filterTasksByStatus('Ожидает'))}
+          onClick={() => filterTasks('Ожидает')}
           className="px-4 py-2 bg-red-300 rounded-md hover:bg-red-400"
         >
           Ожидает
         </button>
         <button
-          onClick={() => setTasks(filterTasksByStatus('Завершено'))}
+          onClick={() => filterTasks('Завершено')}
           className="px-4 py-2 bg-green-300 rounded-md hover:bg-green-400"
         >
           Завершено
@@ -104,16 +115,16 @@ const TasksPage = () => {
 
       <div className="grid gap-4 p-4 bg-white rounded-lg shadow border-2 border-red-500 m-4">
         {[
-          { title: 'Текущие задачи', tasks: filterTasksByStatus('В процессе') },
-          { title: 'Ожидающие задачи', tasks: filterTasksByStatus('Ожидает') },
-          { title: 'Завершённые задачи', tasks: filterTasksByStatus('Завершено') },
+          { title: 'Текущие задачи', status: 'В процессе' },
+          { title: 'Ожидающие задачи', status: 'Ожидает' },
+          { title: 'Завершённые задачи', status: 'Завершено' },
         ].map((section) => (
           <div key={section.title}>
             <div className="p-1 bg-white rounded-lg text-center border-2 border-red-500">
               <h2 className="text-2xl font-semibold text-red-500">{section.title}</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 ">
-              {section.tasks.map(task => (
+              {filterTasksByStatus(section.status as Task['status']).map(task => (
                 <div
                   key={task.id}
                   className={`p-4 ${getStatusClass(task.status)} rounded-lg shadow border-2 border-red-500 cursor-pointer transform transition-all hover:scale-105`}
@@ -129,17 +140,15 @@ const TasksPage = () => {
                   )}
                   <div className="mt-4 flex gap-2 justify-between">
                     {task.status === 'В процессе' && (
-                      <>
-                        <button
-                          className="px-4 py-2 text-white bg-yellow-500 rounded-md hover:bg-yellow-600"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            finishTask(task.id);
-                          }}
-                        >
-                          Завершить
-                        </button>
-                      </>
+                      <button
+                        className="px-4 py-2 text-white bg-yellow-500 rounded-md hover:bg-yellow-600"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          finishTask(task.id);
+                        }}
+                      >
+                        Завершить
+                      </button>
                     )}
                     {task.status === 'Ожидает' && (
                       <button
@@ -153,17 +162,15 @@ const TasksPage = () => {
                       </button>
                     )}
                     {task.status === 'Завершено' && (
-                      <>
-                        <button
-                          className="px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-600"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            resetTaskStatus(task.id);
-                          }}
-                        >
-                          Исправить
-                        </button>
-                      </>
+                      <button
+                        className="px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-600"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          resetTaskStatus(task.id);
+                        }}
+                      >
+                        Исправить
+                      </button>
                     )}
                   </div>
                 </div>

@@ -10,7 +10,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'r
 interface User {
     id: number;
     username: string;
-    position: string;
+    post: string;
     avatar: string;
     name: string;
     experience: string;
@@ -19,21 +19,71 @@ interface User {
     address: string;
 }
 
+type Notification = {
+    id: number;
+    title: string;
+    details: string;
+    read: boolean;
+};
+
 const Lk = () => {
-    const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-
-    const notifications = [
-        { title: 'Смена на завтра', details: 'У вас назначена смена на завтра с 8:00 до 16:00.' },
-        { title: 'Инструктаж', details: 'Не забудьте пройти инструктаж по технике безопасности.' },
-        { title: 'Собрание отдела', details: 'Собрание отдела в пятницу в 14:00 в комнате 305.' },
-    ];
     const [expandedIndexes, setExpandedIndexes] = useState<number[]>([]);
+    const [notifications, setNotifications] = useState<Notification[]>([]);
 
-    const toggleDetails = (index: number) => {
-        setExpandedIndexes((prev) =>
-            prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
-        );
+    const [expandedNoteId, setExpandedNoteId] = useState<number | null>(null); // Состояние для отслеживания раскрытого уведомления
+
+    const handleToggle = (id: number) => {
+        // Переключаем состояние раскрытия уведомления
+        setExpandedNoteId(prevId => (prevId === id ? null : id));
     };
+
+    useEffect(() => {
+        fetchNotifications();
+    }, []);
+
+    // Функция для получения уведомлений
+    async function fetchNotifications() {
+        const res = await fetch('/api/notifications');
+        const data = await res.json();
+        setNotifications(data);
+    }
+
+    // Функция для пометки уведомления как прочитанное
+    async function markAsRead(id: number) {
+        try {
+            const res = await fetch(`/api/notifications/${id}`, {
+                method: 'PATCH',
+            });
+
+            if (!res.ok) throw new Error('Ошибка при пометке как прочитанное');
+
+            // Обновляем состояние локально
+            setNotifications((prev) =>
+                prev.map((note) => (note.id === id ? { ...note, read: true } : note))
+            );
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    // Функция для удаления уведомления
+    async function deleteNotification(id: number) {
+        try {
+            const res = await fetch(`/api/notifications/${id}`, {
+                method: 'DELETE',
+            });
+
+            if (!res.ok) throw new Error('Ошибка при удалении уведомления');
+
+            // Обновляем состояние локально, удаляя уведомление из списка
+            setNotifications((prev) => prev.filter((note) => note.id !== id));
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+
+
     const [user, setUser] = useState<User | null>(null);
     const weather = {
         temp: 22,
@@ -87,16 +137,18 @@ const Lk = () => {
                 <div className="ml-5">
                     <h2 className="text-2xl font-bold">{user.name}</h2>
                     <p className="text-sm text-gray-600">{user.email}</p>
-                    <p className="text-sm text-gray-600">Роль: {user.position}</p>
+                    <p className="text-sm text-gray-600">Роль: {user.post}</p>
                 </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-6 border-2 border-red-500">
                     <h2 className="text-xl font-semibold text-red-600">Сегодня ваша смена</h2>
                     <p className="text-gray-700">Дневная смена</p>
-                    <button className="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
-                        Подробнее
-                    </button>
+                    <Link href="/lk/schedule">
+                        <button className="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                            Подробнее
+                        </button>
+                    </Link>
                 </div>
 
                 <div className="bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-6 border-2 border-red-500">
@@ -169,25 +221,35 @@ const Lk = () => {
                     <h3 className="border-b border-red-500 text-xl font-semibold text-red-600">Уведомления</h3>
                 </div>
                 <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                    {notifications.map((note, index) => (
+                    {notifications.map((note) => (
                         <li
-                            key={index}
-                            className="bg-white rounded-lg shadow border-2 border-red-400 p-3 hover:shadow-lg transition-all duration-200 text-sm"
+                            key={note.id}
+                            className={`rounded-lg shadow border-2 p-3 hover:shadow-lg transition-all duration-200 text-sm ${note.read ? 'bg-green-100 border-green-400' : 'bg-white border-red-400'}`}
                         >
                             <div className="flex flex-col gap-2">
-                                <button
-                                    onClick={() => toggleDetails(index)}
-                                    className="text-left text-gray-700 font-medium hover:bg-gray-300 bg-gray-200 rounded-lg px-2 py-1"
-                                >
-                                    📌 {note.title}
-                                </button>
-                                {expandedIndexes.includes(index) && (
+                                <p className="text-gray-700 font-medium">📌 {note.title}</p>
+                                {expandedNoteId === note.id && (
                                     <p className="text-gray-600 text-sm">{note.details}</p>
                                 )}
                                 <div className="flex justify-end gap-2">
-                                    <button className='bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded text-xs font-medium'>✔</button>
-                                    <button className='bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium'>👁️</button>
-                                    <button className='bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs font-medium'>✖</button>
+                                    <button
+                                        onClick={() => markAsRead(note.id)}
+                                        className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium"
+                                    >
+                                        👁️
+                                    </button>
+                                    <button
+                                        onClick={() => deleteNotification(note.id)} // Обработчик удаления
+                                        className="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs font-medium"
+                                    >
+                                        ✖
+                                    </button>
+                                    <button
+                                        onClick={() => handleToggle(note.id)}
+                                        className="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs font-medium"
+                                    >
+                                        {expandedNoteId === note.id ? 'Свернуть' : 'Развернуть'}
+                                    </button>
                                 </div>
                             </div>
                         </li>
