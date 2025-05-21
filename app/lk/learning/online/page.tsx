@@ -31,7 +31,7 @@ const OnlinePage: React.FC = () => {
             <CourseCard
                 title="Виртуальные занятия"
                 description="Присоединяйтесь к онлайн-занятиям с экспертами и получайте знания в реальном времени."
-                link="/online-learning/virtual-classes"
+                link="/lk/learning/online/virtual-classes"
                 Icon={FaChalkboardTeacher}
             />
             <CourseCard

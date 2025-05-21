@@ -54,11 +54,6 @@ const LearningPage: React.FC = () => {
                         </li>
                     </ul>
                 </nav>
-                <div className="text-center mt-10">
-                    <Link href="/lk/learning">
-                        <p className="text-red-500 text-lg hover:underline">Вернуться назад</p>
-                    </Link>
-                </div>
             </div>
 
             <div className="bg-gradient-to-r from-white via-red-50 to-red-100 bg-opacity-90 backdrop-blur-lg rounded-2xl shadow-2xl p-10 border-2 border-red-500 mt-5">
@@ -105,11 +100,6 @@ const LearningPage: React.FC = () => {
                         </li>
                     </ul>
                 </nav>
-                <div className="text-center mt-10">
-                    <Link href="/lk/learning">
-                        <p className="text-red-500 text-lg hover:underline">Вернуться назад</p>
-                    </Link>
-                </div>
             </div>
         </div>
     );

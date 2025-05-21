@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { FaEdit } from 'react-icons/fa';
-
+import Image from 'next/image';
 interface TeamMember {
   id: number;
   name: string;
@@ -65,9 +65,11 @@ const TeamPage: React.FC = () => {
             className="p-8 bg-white bg-opacity-90 rounded-lg shadow-md border-2 border-red-500 cursor-pointer flex flex-col items-center justify-center text-center transform transition-all hover:scale-105 hover:shadow-lg"
             onClick={() => openMemberModal(member.id)}
           >
-            <img
+            <Image
               src={member.image}
               alt={member.name}
+              height={100}
+              width={100}
               className="w-32 h-32 rounded-full mx-auto mb-4"
             />
             <h2 className="text-3xl font-bold text-red-600 mb-4">{member.name}</h2>

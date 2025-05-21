@@ -26,6 +26,44 @@ type Notification = {
     read: boolean;
 };
 
+// Добавляем интерфейс для модального окна
+interface DeleteModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onConfirm: () => void;
+    notificationTitle: string;
+}
+
+// Компонент модального окна
+const DeleteModal = ({ isOpen, onClose, onConfirm, notificationTitle }: DeleteModalProps) => {
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 max-w-sm w-full mx-4 shadow-xl border-2 border-red-500">
+                <h3 className="text-xl font-semibold text-red-600 mb-4">Подтверждение удаления</h3>
+                <p className="text-gray-700 mb-6">
+                    Вы уверены, что хотите удалить уведомление "{notificationTitle}"?
+                </p>
+                <div className="flex justify-end gap-4">
+                    <button
+                        onClick={onClose}
+                        className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition-colors"
+                    >
+                        Отмена
+                    </button>
+                    <button
+                        onClick={onConfirm}
+                        className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+                    >
+                        Удалить
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const Lk = () => {
     const [expandedIndexes, setExpandedIndexes] = useState<number[]>([]);
     const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -66,6 +104,16 @@ const Lk = () => {
         }
     }
 
+    const [deleteModal, setDeleteModal] = useState<{
+        isOpen: boolean;
+        notificationId: number | null;
+        notificationTitle: string;
+    }>({
+        isOpen: false,
+        notificationId: null,
+        notificationTitle: '',
+    });
+
     // Функция для удаления уведомления
     async function deleteNotification(id: number) {
         try {
@@ -77,12 +125,22 @@ const Lk = () => {
 
             // Обновляем состояние локально, удаляя уведомление из списка
             setNotifications((prev) => prev.filter((note) => note.id !== id));
+            // Закрываем модальное окно
+            setDeleteModal({ isOpen: false, notificationId: null, notificationTitle: '' });
         } catch (err) {
             console.error(err);
+            alert('Произошла ошибка при удалении уведомления');
         }
     }
 
-
+    // Функция для открытия модального окна
+    const openDeleteModal = (id: number, title: string) => {
+        setDeleteModal({
+            isOpen: true,
+            notificationId: id,
+            notificationTitle: title,
+        });
+    };
 
     const [user, setUser] = useState<User | null>(null);
     const weather = {
@@ -140,7 +198,7 @@ const Lk = () => {
                     <p className="text-sm text-gray-600">Роль: {user.post}</p>
                 </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-6 border-2 border-red-500">
                     <h2 className="text-xl font-semibold text-red-600">Сегодня ваша смена</h2>
                     <p className="text-gray-700">Дневная смена</p>
@@ -159,6 +217,22 @@ const Lk = () => {
                             Открыть задачи
                         </button>
                     </Link>
+                </div>
+                <div className="bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-6 border-2 border-red-500 grid grid-cols-2">
+                    <div>
+                        <h2 className="text-xl font-semibold text-red-600">Погода</h2>
+                        <p className="text-gray-700">Температура: {weather.temp}°C — {weather.description}</p>
+                        <p className="text-gray-700"></p>
+                        <p className="text-gray-600">Влажность: {weather.humidity}%</p>
+                        <p className="text-gray-600">Ветер: {weather.windSpeed} м/с</p>
+                    </div>                    
+                    <div className="flex items-center justify-center">
+                        <img
+                            src={`http://openweathermap.org/img/wn/${weather.icon}.png`}
+                            alt={weather.description}
+                            className="w-32 h-16 object-cover"
+                        />
+                    </div>
                 </div>
             </div>
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -216,6 +290,14 @@ const Lk = () => {
                 </div>
             </div>
 
+            {/* Добавляем модальное окно */}
+            <DeleteModal
+                isOpen={deleteModal.isOpen}
+                onClose={() => setDeleteModal({ isOpen: false, notificationId: null, notificationTitle: '' })}
+                onConfirm={() => deleteModal.notificationId && deleteNotification(deleteModal.notificationId)}
+                notificationTitle={deleteModal.notificationTitle}
+            />
+
             <div className="mt-8 bg-white bg-opacity-80 backdrop-blur-lg rounded-lg shadow-md p-4 border-2 border-red-500">
                 <div className="mb-4 text-center">
                     <h3 className="border-b border-red-500 text-xl font-semibold text-red-600">Уведомления</h3>
@@ -239,7 +321,7 @@ const Lk = () => {
                                         👁️
                                     </button>
                                     <button
-                                        onClick={() => deleteNotification(note.id)} // Обработчик удаления
+                                        onClick={() => openDeleteModal(note.id, note.title)}
                                         className="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs font-medium"
                                     >
                                         ✖
