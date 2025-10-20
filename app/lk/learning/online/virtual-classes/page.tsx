@@ -116,11 +116,7 @@ const VirtualClassesPage: React.FC = () => {
         const fetchClasses = async () => {
             try {
                 setIsLoading(true);
-                // TODO: Replace with actual API call
-                // const response = await fetch('/api/virtual-classes');
-                // const data = await response.json();
-                // setClasses(data);
-                setClasses(mockClasses); // Temporary mock data
+                setClasses(mockClasses);
             } catch (err) {
                 setError('Не удалось загрузить занятия. Пожалуйста, попробуйте позже.');
             } finally {

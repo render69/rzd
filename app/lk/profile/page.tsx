@@ -1,30 +1,35 @@
 'use client';
 
-import Image from 'next/image';
-import { useState, useEffect } from 'react';
-import { FaEnvelope, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Card from '../../components/ui/Card';
+import Button from '../../components/ui/Button';
+import Input from '../../components/ui/Input';
+import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaBriefcase, FaCalendarAlt, FaEdit, FaSave, FaTimes } from 'react-icons/fa';
 
 interface User {
-    avatar: string; /// Ссылка на аватар пользователя
-    username: string; /// Уникальное имя пользователя для входа
-    name: string; /// Имя пользователя
-    surname: string;                            /// Фамилия пользователя
-    patronymic: string;                            /// Отчество пользователя
-    city: string;                          /// Город проживания
-    street: string;                       /// Улица
-    house: string;                           /// Номер дома
-    apartment: string;                           /// Номер квартиры
-    experience: number;                                   /// Опыт работы (в годах)
-    post: string;                        /// Должность пользователя
-    email: string;                  /// Уникальный email пользователя
-    phone: string;                           /// Номер телефона пользователя
+    id: number;
+    username: string;
+    name: string;
+    surname: string;
+    patronymic: string;
+    city: string;
+    street: string;
+    house: string;
+    apartment: string;
+    experience: number;
+    post: string;
+    email: string;
+    phone: string;
+    avatar: string;
+    teamId?: number;
 }
 
-const Profile = () => {
+const ProfilePage = () => {
     const [user, setUser] = useState<User | null>(null);
-    const [editedUser, setEditedUser] = useState<User | null>(null);
     const [isEditing, setIsEditing] = useState(false);
-    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -32,188 +37,236 @@ const Profile = () => {
             if (res.ok) {
                 const data = await res.json();
                 setUser(data);
-                setEditedUser(data);
+            } else {
+                router.push('/');
             }
         };
 
         fetchUser();
-    }, []);
+    }, [router]);
 
-    const handleSaveChanges = () => {
-        setShowConfirmation(true);
-        // Here you would typically make an API call to save the changes
-        // After successful API call:
-        // setUser(editedUser);
+    const handleSave = async () => {
+        if (!user) return;
+        
+        setLoading(true);
+        try {
+            const res = await fetch('/api/user', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(user),
+            });
+
+            if (res.ok) {
+                setIsEditing(false);
+            } else {
+                alert('Ошибка при сохранении данных');
+            }
+        } catch (error) {
+            alert('Ошибка при сохранении данных');
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const handleCloseConfirmation = () => {
-        setShowConfirmation(false);
-        setIsEditing(false);
-        // Reset edited data to original user data
-        setEditedUser(user);
-    };
-
-    const handleStartEditing = () => {
-        setEditedUser(user);
-        setIsEditing(true);
-    };
-
-    if (!user || !editedUser) {
-        return <div className="p-8">Загрузка профиля...</div>;
+    if (!user) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#C8050E]"></div>
+            </div>
+        );
     }
 
     return (
-        <div className="p-6 m-4 bg-white bg-opacity-30 backdrop-blur rounded-lg shadow-lg border-2 border-red-500">
-            {showConfirmation && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-white p-8 rounded-lg shadow-lg border-2 border-red-500 max-w-md">
-                        <h2 className="text-2xl font-bold text-red-600 mb-4">Ваши данные отправлены на согласование в отдел кадров</h2>
-                        <div className="flex justify-center mt-4">
-                            <button
-                                onClick={handleCloseConfirmation}
-                                className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-300"
-                            >
-                                ОК
-                            </button>
+        <div className="min-h-screen p-2 sm:p-4 lg:p-6 xl:p-8">
+            <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
+                <div className="text-center">
+                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">Мой профиль</h1>
+                    <p className="text-lg sm:text-xl text-gray-600">Управление личной информацией</p>
+                </div>
+
+                <Card className="bg-gradient-to-r from-[#C8050E] to-[#A0040B] text-white">
+                    <div className="flex flex-col lg:flex-row items-center lg:items-start space-y-6 lg:space-y-0 lg:space-x-8">
+                        <div className="relative">
+                            <div className="w-32 h-32 bg-white/20 rounded-full flex items-center justify-center">
+                                {user.avatar ? (
+                                    <img src={user.avatar} alt="avatar" className="w-full h-full rounded-full object-cover" />
+                                ) : (
+                                    <FaUser className="text-6xl text-white/70" />
+                                )}
+                            </div>
+                            {isEditing && (
+                                <button className="absolute bottom-0 right-0 w-10 h-10 bg-white rounded-full flex items-center justify-center text-[#C8050E] hover:bg-gray-100 transition-colors">
+                                    <FaEdit className="text-sm" />
+                                </button>
+                            )}
+                        </div>
+                        
+                        <div className="flex-1 text-center lg:text-left">
+                            <h2 className="text-3xl font-bold mb-2">
+                                {user.name} {user.surname} {user.patronymic}
+                            </h2>
+                            <p className="text-xl text-white/90 mb-4">{user.post}</p>
+                            <div className="flex flex-wrap justify-center lg:justify-start gap-6 text-sm">
+                                <div className="flex items-center space-x-2">
+                                    <FaEnvelope className="text-white/70" />
+                                    <span>{user.email}</span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <FaPhone className="text-white/70" />
+                                    <span>{user.phone}</span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <FaMapMarkerAlt className="text-white/70" />
+                                    <span>{user.city}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex space-x-3">
+                            {isEditing ? (
+                                <>
+                                    <Button
+                                        onClick={handleSave}
+                                        disabled={loading}
+                                        className="bg-white text-[#C8050E] hover:bg-gray-100"
+                                    >
+                                        <FaSave className="mr-2" />
+                                        {loading ? 'Сохранение...' : 'Сохранить'}
+                                    </Button>
+                                    <Button
+                                        variant="outline"
+                                        onClick={() => setIsEditing(false)}
+                                        className="border-white text-white hover:bg-white hover:text-[#C8050E]"
+                                    >
+                                        <FaTimes className="mr-2" />
+                                        Отмена
+                                    </Button>
+                                </>
+                            ) : (
+                                <Button
+                                    onClick={() => setIsEditing(true)}
+                                    className="bg-white text-[#C8050E] hover:bg-gray-100"
+                                >
+                                    <FaEdit className="mr-2" />
+                                    Редактировать
+                                </Button>
+                            )}
                         </div>
                     </div>
-                </div>
-            )}
-            <div className="mt-8 p-8 max-w-4xl mx-auto bg-white bg-opacity-30 backdrop-blur rounded-lg shadow-lg">
-                <div className="flex items-center space-x-6">
-                    <div className="relative">
-                        <Image
-                            src={user.avatar}
-                            alt="Аватар пользователя"
-                            width={120}
-                            height={120}
-                            className="w-32 h-32 rounded-full object-cover shadow-lg hover:scale-110 transition-transform duration-300 ease-in-out"
-                        />
-                        <div className="absolute top-0 right-0 bg-red-500 text-white rounded-full px-2 py-1 text-xs font-bold shadow-md">
-                            {user.post}
-                        </div>
-                    </div>
-                    <div>
-                        <h1 className="text-3xl font-semibold text-gray-800">
-                            {user.surname} {/*Фамилия пользователя*/}
-                            {user.name} {/*Имя пользователя*/}
-                            {user.patronymic} {/*Отчество пользователя*/}
-                        </h1>
-                        <p className="text-lg text-gray-600">Стаж: {user.experience} года/лет</p>
-                        <p className="text-gray-600">Логин: {user.username}</p>
-                    </div>
-                </div>
-                <div className="mt-6 space-y-4">
-                    <div className="flex items-center space-x-2 p-4 bg-white bg-opacity-70 rounded-xl shadow-lg hover:bg-red-50 transition duration-300 ease-in-out">
-                        <FaEnvelope className="text-red-600 text-2xl" />
-                        <p className="text-gray-800">
-                            <strong>Электронная почта:</strong> {user.email}
-                        </p>
-                    </div>
-                    <div className="flex items-center space-x-2 p-4 bg-white bg-opacity-70 rounded-xl shadow-lg hover:bg-red-50 transition duration-300 ease-in-out">
-                        <FaPhone className="text-red-600 text-2xl" />
-                        <p className="text-gray-800">
-                            <strong>Телефон:</strong> {user.phone}
-                        </p>
-                    </div>
-                    <div className="flex items-center space-x-2 p-4 bg-white bg-opacity-70 rounded-xl shadow-lg hover:bg-red-50 transition duration-300 ease-in-out">
-                        <FaMapMarkerAlt className="text-red-600 text-2xl" />
-                        <p className="text-gray-800">
-                            <strong>Адрес: </strong>
-                            {user.city} {/* Город проживания*/}
-                            {user.street} {/* Улица*/}
-                            д.{user.house} {/* Номер дома*/}
-                            кв.{user.apartment} {/* Номер квартиры */}
-                        </p>
-                    </div>
-                </div>
-                <div className="mt-6 text-center">
-                    <button
-                        onClick={isEditing ? handleSaveChanges : handleStartEditing}
-                        className="px-8 py-3 bg-red-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-red-700 transition-all duration-300 ease-in-out"
-                    >
-                        {isEditing ? 'Сохранить изменения' : 'Редактировать'}
-                    </button>
-                </div>
-                {isEditing && (
-                    <div className="mt-6 space-y-4">
-                        <div>
-                            <label htmlFor="email" className="block text-lg font-medium text-gray-700">
-                                Электронная почта
-                            </label>
-                            <input
-                                id="email"
+                </Card>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <Card>
+                        <h3 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+                            <FaUser className="mr-2 text-[#C8050E]" />
+                            Личная информация
+                        </h3>
+                        <div className="space-y-4">
+                            <Input
+                                label="Имя"
+                                value={user.name}
+                                onChange={(e) => setUser({...user, name: e.target.value})}
+                                disabled={!isEditing}
+                            />
+                            <Input
+                                label="Фамилия"
+                                value={user.surname}
+                                onChange={(e) => setUser({...user, surname: e.target.value})}
+                                disabled={!isEditing}
+                            />
+                            <Input
+                                label="Отчество"
+                                value={user.patronymic}
+                                onChange={(e) => setUser({...user, patronymic: e.target.value})}
+                                disabled={!isEditing}
+                            />
+                            <Input
+                                label="Email"
                                 type="email"
-                                value={editedUser.email}
-                                onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })}
-                                className="w-full p-3 bg-white rounded-lg border-2 border-gray-300 mt-2 focus:outline-none focus:ring-2 focus:ring-red-600"
+                                value={user.email}
+                                onChange={(e) => setUser({...user, email: e.target.value})}
+                                disabled={!isEditing}
+                                icon={<FaEnvelope className="text-gray-400" />}
+                            />
+                            <Input
+                                label="Телефон"
+                                value={user.phone}
+                                onChange={(e) => setUser({...user, phone: e.target.value})}
+                                disabled={!isEditing}
+                                icon={<FaPhone className="text-gray-400" />}
                             />
                         </div>
-                        <div>
-                            <label htmlFor="phone" className="block text-lg font-medium text-gray-700">
-                                Телефон
-                            </label>
-                            <input
-                                id="phone"
-                                type="tel"
-                                value={editedUser.phone}
-                                onChange={(e) => setEditedUser({ ...editedUser, phone: e.target.value })}
-                                className="w-full p-3 bg-white rounded-lg border-2 border-gray-300 mt-2 focus:outline-none focus:ring-2 focus:ring-red-600"
+                    </Card>
+
+                    <Card>
+                        <h3 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+                            <FaBriefcase className="mr-2 text-[#C8050E]" />
+                            Рабочая информация
+                        </h3>
+                        <div className="space-y-4">
+                            <Input
+                                label="Должность"
+                                value={user.post}
+                                onChange={(e) => setUser({...user, post: e.target.value})}
+                                disabled={!isEditing}
                             />
-                        </div>
-                        <div>
-                            <label htmlFor="city" className="block text-lg font-medium text-gray-700">
-                                Город
-                            </label>
-                            <input
-                                id="city"
-                                type="text"
-                                value={editedUser.city}
-                                onChange={(e) => setEditedUser({ ...editedUser, city: e.target.value })}
-                                className="w-full p-3 bg-white rounded-lg border-2 border-gray-300 mt-2 focus:outline-none focus:ring-2 focus:ring-red-600"
+                            <Input
+                                label="Опыт работы (лет)"
+                                type="number"
+                                value={user.experience}
+                                onChange={(e) => setUser({...user, experience: parseInt(e.target.value) || 0})}
+                                disabled={!isEditing}
                             />
+                            <div className="pt-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Стаж в компании
+                                </label>
+                                <div className="flex items-center space-x-2 text-gray-600">
+                                    <FaCalendarAlt className="text-gray-400" />
+                                    <span>{user.experience} лет</span>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <label htmlFor="street" className="block text-lg font-medium text-gray-700">
-                                Улица
-                            </label>
-                            <input
-                                id="street"
-                                type="text"
-                                value={editedUser.street}
-                                onChange={(e) => setEditedUser({ ...editedUser, street: e.target.value })}
-                                className="w-full p-3 bg-white rounded-lg border-2 border-gray-300 mt-2 focus:outline-none focus:ring-2 focus:ring-red-600"
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="house" className="block text-lg font-medium text-gray-700">
-                                Дом
-                            </label>
-                            <input
-                                id="house"
-                                type="text"
-                                value={editedUser.house}
-                                onChange={(e) => setEditedUser({ ...editedUser, house: e.target.value })}
-                                className="w-full p-3 bg-white rounded-lg border-2 border-gray-300 mt-2 focus:outline-none focus:ring-2 focus:ring-red-600"
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="apartment" className="block text-lg font-medium text-gray-700">
-                                Квартира
-                            </label>
-                            <input
-                                id="apartment"
-                                type="text"
-                                value={editedUser.apartment}
-                                onChange={(e) => setEditedUser({ ...editedUser, apartment: e.target.value })}
-                                className="w-full p-3 bg-white rounded-lg border-2 border-gray-300 mt-2 focus:outline-none focus:ring-2 focus:ring-red-600"
-                            />
-                        </div>
+                    </Card>
+                </div>
+
+                <Card>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+                        <FaMapMarkerAlt className="mr-2 text-[#C8050E]" />
+                        Адрес
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <Input
+                            label="Город"
+                            value={user.city}
+                            onChange={(e) => setUser({...user, city: e.target.value})}
+                            disabled={!isEditing}
+                        />
+                        <Input
+                            label="Улица"
+                            value={user.street}
+                            onChange={(e) => setUser({...user, street: e.target.value})}
+                            disabled={!isEditing}
+                        />
+                        <Input
+                            label="Дом"
+                            value={user.house}
+                            onChange={(e) => setUser({...user, house: e.target.value})}
+                            disabled={!isEditing}
+                        />
+                        <Input
+                            label="Квартира"
+                            value={user.apartment}
+                            onChange={(e) => setUser({...user, apartment: e.target.value})}
+                            disabled={!isEditing}
+                        />
                     </div>
-                )}
+                </Card>
             </div>
         </div>
     );
 };
 
-export default Profile;
+export default ProfilePage;

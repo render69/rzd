@@ -50,14 +50,6 @@ const VirtualClassSession: React.FC<{ params: { id: string } }> = ({ params }) =
         const fetchClassData = async () => {
             try {
                 setIsLoading(true);
-                // TODO: Replace with actual API calls
-                // const [classData, participantsData, messagesData] = await Promise.all([
-                //     fetch(`/api/virtual-classes/${params.id}`),
-                //     fetch(`/api/virtual-classes/${params.id}/participants`),
-                //     fetch(`/api/virtual-classes/${params.id}/messages`)
-                // ]);
-                
-                // Temporary mock data
                 setParticipants(mockParticipants);
                 setMessages(mockMessages);
             } catch (err) {
@@ -71,7 +63,6 @@ const VirtualClassSession: React.FC<{ params: { id: string } }> = ({ params }) =
     }, [params.id]);
 
     useEffect(() => {
-        // Auto-scroll to bottom when new messages arrive
         chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
@@ -80,11 +71,6 @@ const VirtualClassSession: React.FC<{ params: { id: string } }> = ({ params }) =
         if (message.trim() && !isSending) {
             try {
                 setIsSending(true);
-                // TODO: Replace with actual API call
-                // await fetch(`/api/virtual-classes/${params.id}/messages`, {
-                //     method: 'POST',
-                //     body: JSON.stringify({ content: message })
-                // });
 
                 const newMessage: Message = {
                     id: Date.now().toString(),
@@ -107,7 +93,6 @@ const VirtualClassSession: React.FC<{ params: { id: string } }> = ({ params }) =
     };
 
     const confirmLeave = () => {
-        // TODO: Add cleanup logic (disconnect from voice channel, etc.)
         router.push('/lk/learning/online/virtual-classes');
     };
 
@@ -141,7 +126,6 @@ const VirtualClassSession: React.FC<{ params: { id: string } }> = ({ params }) =
 
     return (
         <div className="h-screen flex flex-col bg-gray-100">
-            {/* Header */}
             <div className="bg-white shadow-md p-4 flex justify-between items-center">
                 <div className="flex items-center space-x-4">
                     <button 
@@ -171,9 +155,7 @@ const VirtualClassSession: React.FC<{ params: { id: string } }> = ({ params }) =
                 </div>
             </div>
 
-            {/* Main Content */}
             <div className="flex-1 flex overflow-hidden">
-                {/* Voice Channel */}
                 <div className="w-1/4 bg-white border-r border-gray-200 p-4 overflow-y-auto">
                     <h2 className="text-lg font-semibold text-gray-700 mb-4 flex items-center">
                         <FaUsers className="mr-2" aria-hidden="true" /> 
@@ -205,7 +187,6 @@ const VirtualClassSession: React.FC<{ params: { id: string } }> = ({ params }) =
                     </div>
                 </div>
 
-                {/* Chat */}
                 <div className="flex-1 flex flex-col bg-white">
                     <div className="flex-1 p-4 overflow-y-auto">
                         {messages.map((msg) => (
@@ -252,7 +233,6 @@ const VirtualClassSession: React.FC<{ params: { id: string } }> = ({ params }) =
                 </div>
             </div>
 
-            {/* Leave Confirmation Modal */}
             {showLeaveConfirm && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                     <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">

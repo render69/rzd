@@ -216,13 +216,10 @@ const CreateReportPage: React.FC = () => {
     setError(null);
 
     try {
-      // Здесь будет логика отправки данных на сервер
       console.log('Отправка отчёта:', formData);
       
-      // Имитация задержки отправки
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // После успешной отправки перенаправляем на страницу отчётов
       router.push('/lk/reports');
     } catch (err) {
       setError('Произошла ошибка при создании отчёта. Пожалуйста, попробуйте снова.');

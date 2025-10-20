@@ -1,13 +1,12 @@
-// lib/auth.ts
 import { serialize } from 'cookie';
 import { NextResponse } from 'next/server';
 
 export async function setLoginSession(user: any) {
-  const sessionToken = user.id;  // Можно использовать JWT или другие методы
+  const sessionToken = user.id; 
   const cookie = serialize('rzd-auth', sessionToken, {
-    httpOnly: true, // Безопасность
-    secure: process.env.NODE_ENV === 'production', // Использовать secure флаг в продакшене
-    maxAge: 60 * 60 * 24 * 7, // 7 дней
+    httpOnly: true, 
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 60 * 60 * 24 * 7,
     path: '/',
   });
 

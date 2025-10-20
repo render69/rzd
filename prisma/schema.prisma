@@ -27,7 +27,7 @@ model User {
   
   email      String   @unique                      /// Уникальный email пользователя
   phone      String                                /// Номер телефона пользователя
-  avatar     String   @default("../img/default-avatar.jpg") /// Ссылка на аватар пользователя
+  avatar     String   @default("/img/default-avatar.jpg") /// Ссылка на аватар пользователя
 
   /// Связи
   tasks      Task[]                                /// Задачи пользователя

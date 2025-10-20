@@ -1,8 +1,5 @@
 import { NextResponse } from 'next/server';
-import prisma from '../../../lib/prisma'; // импортируем prisma
-import { PrismaClient } from '@prisma/client'; // импортируем PrismaClient для типизации
-
-// Типизация для смены (если она не была импортирована ранее)
+import prisma from '../../../lib/prisma';
 interface Shift {
   id: number;
   startTime: string;
@@ -12,8 +9,8 @@ interface Shift {
 
 export async function GET() {
   try {
-    const shifts = await prisma.shifts.findMany(); // получаем список смен
-    return NextResponse.json(shifts); // возвращаем данные в формате JSON
+    const shifts = await prisma.shifts.findMany();
+    return NextResponse.json(shifts);
   } catch (error) {
     return NextResponse.error();
   }

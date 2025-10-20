@@ -1,38 +1,143 @@
 'use client';
 
-import { FaCommentDots } from 'react-icons/fa';
+import React, { useState } from 'react';
+import Card from '../../../components/ui/Card';
+import Button from '../../../components/ui/Button';
+import Input from '../../../components/ui/Input';
+import { FaCommentDots, FaPaperPlane, FaArrowLeft, FaUser, FaRobot } from 'react-icons/fa';
+import Link from 'next/link';
+
+interface Message {
+    id: number;
+    text: string;
+    sender: 'user' | 'support';
+    timestamp: string;
+}
 
 const ChatPage = () => {
-  return (
-    <div className="min-h-screen flex-col overflow-hidden p-10 bg-white bg-opacity-30 backdrop-blur rounded-lg shadow-lg flex items-center justify-center">
-      <div className="w-full max-w-5xl bg-white p-8 rounded-lg shadow-lg border-2 border-red-500">
-        <h1 className="text-4xl font-semibold text-gray-800 mb-6 text-center">
-          Чат с поддержкой
-        </h1>
-        <div className="flex flex-col items-center justify-center space-y-8 h-full border-2 border-red-500 shadow-lg rounded-lg">
-          <div className="w-full bg-white p-8 rounded-lg">
-            <div className="flex items-center mb-6">
-              <FaCommentDots className="mr-4 text-4xl text-red-600" />
-              <h2 className="text-3xl font-semibold">Начните чат с нами</h2>
+    const [message, setMessage] = useState('');
+    const [messages, setMessages] = useState<Message[]>([
+        {
+            id: 1,
+            text: 'Добрый день! Чем мы можем помочь?',
+            sender: 'support',
+            timestamp: new Date().toLocaleTimeString()
+        }
+    ]);
+
+    const handleSendMessage = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!message.trim()) return;
+
+        const newMessage: Message = {
+            id: messages.length + 1,
+            text: message,
+            sender: 'user',
+            timestamp: new Date().toLocaleTimeString()
+        };
+
+        setMessages(prev => [...prev, newMessage]);
+        setMessage('');
+
+        setTimeout(() => {
+            const supportResponse: Message = {
+                id: messages.length + 2,
+                text: 'Спасибо за ваше сообщение! Мы рассмотрим ваш вопрос и ответим в ближайшее время.',
+                sender: 'support',
+                timestamp: new Date().toLocaleTimeString()
+            };
+            setMessages(prev => [...prev, supportResponse]);
+        }, 1000);
+    };
+
+    return (
+        <div className="min-h-screen p-2 sm:p-4 lg:p-6 xl:p-8">
+            <div className="max-w-4xl mx-auto space-y-6">
+                <div className="text-center">
+                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 flex items-center justify-center">
+                        <FaCommentDots className="mr-3 text-[#C8050E]" />
+                        Чат с поддержкой
+                    </h1>
+                    <p className="text-lg sm:text-xl text-gray-600">Свяжитесь с нами в режиме реального времени</p>
+                </div>
+
+                <div className="flex justify-start">
+                    <Link href="/lk/support">
+                        <Button variant="outline" size="sm" className="flex items-center space-x-2">
+                            <FaArrowLeft />
+                            <span>Назад к поддержке</span>
+                        </Button>
+                    </Link>
+                </div>
+
+                <Card className="h-[600px] flex flex-col">
+                    <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                        {messages.map((msg) => (
+                            <div
+                                key={msg.id}
+                                className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                            >
+                                <div
+                                    className={`max-w-[80%] p-3 rounded-lg ${
+                                        msg.sender === 'user'
+                                            ? 'bg-[#C8050E] text-white'
+                                            : 'bg-gray-100 text-gray-900'
+                                    }`}
+                                >
+                                    <div className="flex items-start space-x-2">
+                                        {msg.sender === 'support' && (
+                                            <FaRobot className="text-[#C8050E] mt-1 flex-shrink-0" />
+                                        )}
+                                        {msg.sender === 'user' && (
+                                            <FaUser className="text-white mt-1 flex-shrink-0" />
+                                        )}
+                                        <div>
+                                            <p className="text-sm sm:text-base">{msg.text}</p>
+                                            <p className={`text-xs mt-1 ${
+                                                msg.sender === 'user' ? 'text-red-100' : 'text-gray-500'
+                                            }`}>
+                                                {msg.timestamp}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="border-t border-gray-200 p-4">
+                        <form onSubmit={handleSendMessage} className="flex space-x-2">
+                            <Input
+                                value={message}
+                                onChange={(e) => setMessage(e.target.value)}
+                                placeholder="Введите сообщение..."
+                                className="flex-1"
+                            />
+                            <Button
+                                type="submit"
+                                disabled={!message.trim()}
+                                className="bg-[#C8050E] hover:bg-[#A0040B] text-white"
+                            >
+                                <FaPaperPlane />
+                            </Button>
+                        </form>
+                    </div>
+                </Card>
+
+                <Card className="bg-gradient-to-r from-blue-50 to-blue-100">
+                    <div className="text-center space-y-2">
+                        <h3 className="text-lg font-semibold text-gray-900">Информация о поддержке</h3>
+                        <p className="text-sm text-gray-600">
+                            Время работы службы поддержки: Пн-Пт с 9:00 до 18:00 (МСК)
+                        </p>
+                        <p className="text-sm text-gray-600">
+                            Среднее время ответа: 5-10 минут
+                        </p>
+                    </div>
+                </Card>
             </div>
-            <div className="bg-gray-100 p-6 rounded-lg mb-6 border-2 border-red-500">
-              <p className="text-gray-700 text-lg">Добрый день! Чем мы можем помочь?</p>
-            </div>
-            <div className="mt-6 flex flex-col items-start space-y-4 w-full">
-              <input
-                type="text"
-                placeholder="Введите сообщение..."
-                className="w-full p-4 bg-gray-50 rounded-lg border-2 border-gray-300 border border-red-500"
-              />
-              <button className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-300">
-                Отправить
-              </button>
-            </div>
-          </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default ChatPage;
