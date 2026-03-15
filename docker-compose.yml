@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: appdb
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      #test: ["CMD-SHELL", "pg_isready -U myuser -d mywebsite_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  backend:
+    build:
+      context: ./backend          
+      dockerfile: Dockerfile
+    container_name: go_backend
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    container_name: next_frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

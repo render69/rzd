@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
@@ -170,7 +171,7 @@ const DashboardPage = () => {
                     <div className="flex flex-col lg:flex-row items-center lg:items-start space-y-4 sm:space-y-6 lg:space-y-0 lg:space-x-6 xl:space-x-8">
                         <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white/20 rounded-full flex items-center justify-center">
                             {user.avatar ? (
-                                <img src={user.avatar} alt="avatar" className="w-full h-full rounded-full object-cover" />
+                                <Image src={user.avatar} alt="avatar" className="w-full h-full rounded-full object-cover" />
                             ) : (
                                 <FaUser className="text-3xl sm:text-4xl text-white/70" />
                             )}
@@ -272,7 +273,7 @@ const DashboardPage = () => {
                                     <p>Ветер: {weather.windSpeed} м/с</p>
                                 </div>
                             </div>
-                            <img
+                            <Image
                                 src={`http://openweathermap.org/img/wn/${weather.icon}.png`}
                                 alt={weather.description}
                                 className="w-20 h-20"
@@ -417,7 +418,7 @@ const DashboardPage = () => {
                 size="sm"
             >
                 <p className="text-gray-700 mb-6">
-                    Вы уверены, что хотите удалить уведомление "{deleteModal.notificationTitle}"?
+                    Вы уверены, что хотите удалить уведомление &quot;{deleteModal.notificationTitle}&quot;?
                 </p>
                 <div className="flex justify-end space-x-3">
                     <Button

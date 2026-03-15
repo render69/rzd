@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import Modal from '../../components/ui/Modal';
+import Image from 'next/image';
 import { FaNewspaper, FaCalendarAlt, FaEye } from 'react-icons/fa';
 
 const newsData = [
@@ -85,7 +86,7 @@ const NewsPage: React.FC = () => {
                         >
                             <div className="space-y-4">
                                 <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
-                                    <img
+                                    <Image
                                         src={news.image}
                                         alt={news.title}
                                         className="w-full h-full object-cover"
@@ -132,7 +133,7 @@ const NewsPage: React.FC = () => {
                                 </div>
 
                                 <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
-                                    <img
+                                    <Image
                                         src={selectedNews.image}
                                         alt={selectedNews.title}
                                         className="w-full h-full object-cover"

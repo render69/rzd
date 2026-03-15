@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
+import Image from 'next/image';
 import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaBriefcase, FaCalendarAlt, FaEdit, FaSave, FaTimes } from 'react-icons/fa';
 
 interface User {
@@ -91,7 +92,7 @@ const ProfilePage = () => {
                         <div className="relative">
                             <div className="w-32 h-32 bg-white/20 rounded-full flex items-center justify-center">
                                 {user.avatar ? (
-                                    <img src={user.avatar} alt="avatar" className="w-full h-full rounded-full object-cover" />
+                                    <Image src={user.avatar} alt="avatar" className="w-full h-full rounded-full object-cover" />
                                 ) : (
                                     <FaUser className="text-6xl text-white/70" />
                                 )}

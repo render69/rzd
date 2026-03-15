@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server'
 
-export function middleware(req: any) {
+export function middleware(req: NextRequest) {
     const cookie = req.headers.get('cookie')?.split(';').find((c) => c.trim().startsWith('rzd-auth='));
     const userId = cookie?.split('=')[1];
 
